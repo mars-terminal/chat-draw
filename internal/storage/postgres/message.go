@@ -3,18 +3,21 @@ package postgres
 import (
 	"context"
 	"fmt"
+
+	"github.com/jmoiron/sqlx"
+
 	"repositorie/internal/entities"
 )
 
 type MessageStore struct {
-	*Store
+	db *sqlx.DB
 
 	table string
 }
 
-func NewMessageStore(store *Store, table string) *MessageStore {
+func NewMessageStore(db *sqlx.DB, table string) *MessageStore {
 	return &MessageStore{
-		Store: store,
+		db:    db,
 		table: table,
 	}
 }
@@ -27,15 +30,15 @@ func (m *MessageStore) GetByID(ctx context.Context, ID int64) (*entities.Message
 		return nil, err
 	}
 
-	user := entities.User{}
+	message := entities.Message{}
 	for rows.Next() {
-		err := rows.StructScan(&user)
+		err := rows.StructScan(&message)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	return &user, nil
+	return &message, nil
 }
 
 func (m *MessageStore) GetByChatID(ctx context.Context, ID int64, limit, offset int64) ([]*entities.Message, error) {

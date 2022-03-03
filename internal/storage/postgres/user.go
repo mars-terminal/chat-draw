@@ -3,18 +3,21 @@ package postgres
 import (
 	"context"
 	"fmt"
+
+	"github.com/jmoiron/sqlx"
+
 	"repositorie/internal/entities"
 )
 
 type UserStore struct {
-	*Store
+	db *sqlx.DB
 
 	table string
 }
 
-func NewUserStore(store *Store, table string) *UserStore {
+func NewUserStore(db *sqlx.DB, table string) *UserStore {
 	return &UserStore{
-		Store: store,
+		db:    db,
 		table: table,
 	}
 }

@@ -2,17 +2,23 @@ package postgres
 
 import (
 	"fmt"
+
 	"github.com/jmoiron/sqlx"
 )
 
-type Store struct {
-	db *sqlx.DB
+type Config struct {
+	Host     string
+	Port     string
+	User     string
+	Password string
+	DBName   string
+	SSLMode  string
 }
 
-func NewStore(username, password, host, port, dbname string) (*Store, error) {
+func NewStore(cfg Config) (*sqlx.DB, error) {
 	dataSourceName := fmt.Sprintf(
-		"username=%s password=%s host=%s port=%s dbname=%s sslmode=disable",
-		username, password, host, port, dbname,
+		"username=%s password=%s host=%s port=%s dbname=%s sslmode=%s",
+		cfg.User, cfg.Password, cfg.Host, cfg.Port, cfg.DBName, cfg.SSLMode,
 	)
 
 	db, err := sqlx.Connect("postgres", dataSourceName)
@@ -20,7 +26,5 @@ func NewStore(username, password, host, port, dbname string) (*Store, error) {
 		return nil, fmt.Errorf("%w", err)
 	}
 
-	return &Store{
-		db: db,
-	}, nil
+	return db, nil
 }

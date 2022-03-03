@@ -2,7 +2,11 @@ package storage
 
 import (
 	"context"
+
+	"github.com/jmoiron/sqlx"
+
 	"repositorie/internal/entities"
+	"repositorie/internal/storage/postgres"
 )
 
 type UserStorage interface {
@@ -38,12 +42,9 @@ type Storage struct {
 	Messages MessageStorage
 }
 
-func NewStorage(
-	users UserStorage,
-	messages MessageStorage,
-) *Storage {
+func NewStorage(db *sqlx.DB) *Storage {
 	return &Storage{
-		Users:    users,
-		Messages: messages,
+		Users:    postgres.NewUserStore(db, "users_table"),
+		Messages: postgres.NewMessageStore(db, "messages_table"),
 	}
 }

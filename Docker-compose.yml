@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  chat-draw:
+    build: ./
+    command: ./chat-draw
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DB_PASSWORD=1234
+
+  db:
+    restart: always
+    image: postgres:14.2-alpine
+    environment:
+      - POSTGRES_USER=bleach
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=ichigo
+    ports:
+      - "5436:5432"
+    volumes:
+      - ./.database/postgres/data:/var/lib/postgresql/data
