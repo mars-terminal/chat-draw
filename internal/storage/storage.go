@@ -28,11 +28,11 @@ type MessageStorage interface {
 	GetByChatID(ctx context.Context, ID int64, limit, offset int64) ([]*entities.Message, error)
 	GetByPeerID(ctx context.Context, ID int64, limit, offset int64) ([]*entities.Message, error)
 
-	Create(ctx context.Context, q *entities.CreateMessageQuery) ([]*entities.Message, error)
+	Create(ctx context.Context, q *entities.CreateMessageQuery) (*entities.Message, error)
 
 	Search(ctx context.Context, query string, limit, offset int64) ([]*entities.Message, error)
 
-	Update(ctx context.Context, q *entities.UpdateMessageQuery) ([]*entities.Message, error)
+	Update(ctx context.Context, q *entities.UpdateMessageQuery) (*entities.Message, error)
 
 	DeleteByID(ctx context.Context, ID int64) error
 }

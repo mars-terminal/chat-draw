@@ -27,5 +27,6 @@ type CreateUserQuery struct {
 }
 
 type UpdateUserQuery struct {
+	ID int64
 	CreateUserQuery
 }
