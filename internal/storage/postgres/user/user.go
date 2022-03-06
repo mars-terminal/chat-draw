@@ -30,15 +30,15 @@ func (u *Store) GetByID(ctx context.Context, ID int64) (*user.User, error) {
 		return nil, fmt.Errorf("failet to get by id (user storage): %w", err)
 	}
 
-	user := user.User{}
+	uzer := user.User{}
 	for rows.Next() {
-		err := rows.StructScan(&user)
+		err := rows.StructScan(&uzer)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	return &user, nil
+	return &uzer, nil
 }
 
 func (u *Store) GetByIDs(ctx context.Context, IDs []int64) ([]*user.User, error) {
@@ -51,12 +51,12 @@ func (u *Store) GetByIDs(ctx context.Context, IDs []int64) ([]*user.User, error)
 
 	var users []*user.User
 	for rows.Next() {
-		var user user.User
-		err := rows.StructScan(&user)
+		var uzer user.User
+		err := rows.StructScan(&uzer)
 		if err != nil {
 			return nil, err
 		}
-		users = append(users, &user)
+		users = append(users, &uzer)
 	}
 
 	return users, nil
@@ -72,14 +72,14 @@ func (u *Store) GetByNickName(ctx context.Context, nickName string) ([]*user.Use
 
 	var users []*user.User
 	for rows.Next() {
-		var user user.User
-		err := rows.StructScan(&user)
+		var uzer user.User
+		err := rows.StructScan(&uzer)
 
 		if err != nil {
 			return nil, err
 		}
 
-		users = append(users, &user)
+		users = append(users, &uzer)
 	}
 
 	return users, nil
@@ -94,13 +94,13 @@ func (u *Store) GetByPhone(ctx context.Context, phone string) ([]*user.User, err
 	}
 	var users []*user.User
 	for rows.Next() {
-		var user user.User
-		err := rows.StructScan(&user)
+		var uzer user.User
+		err := rows.StructScan(&uzer)
 
 		if err != nil {
 			return nil, err
 		}
-		users = append(users, &user)
+		users = append(users, &uzer)
 	}
 	return users, nil
 }

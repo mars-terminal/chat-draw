@@ -10,20 +10,20 @@ import (
 	"repositorie/internal/entities"
 )
 
-type MessageStore struct {
+type Store struct {
 	db *sqlx.DB
 
 	table string
 }
 
-func NewMessageStore(db *sqlx.DB, table string) *MessageStore {
-	return &MessageStore{
+func NewMessageStore(db *sqlx.DB, table string) *Store {
+	return &Store{
 		db:    db,
 		table: table,
 	}
 }
 
-func (m *MessageStore) GetByID(ctx context.Context, ID int64) (*entities.Message, error) {
+func (m *Store) GetByID(ctx context.Context, ID int64) (*entities.Message, error) {
 	query := fmt.Sprintf(`SELECT * FROM %s WHERE id=?`, m.table)
 
 	rows, err := m.db.QueryxContext(ctx, query, ID)
@@ -42,7 +42,7 @@ func (m *MessageStore) GetByID(ctx context.Context, ID int64) (*entities.Message
 	return &message, nil
 }
 
-func (m *MessageStore) GetByChatID(ctx context.Context, ID int64, limit, offset int64) ([]*entities.Message, error) {
+func (m *Store) GetByChatID(ctx context.Context, ID int64, limit, offset int64) ([]*entities.Message, error) {
 	query := fmt.Sprintf(`
 SELECT
 	*
@@ -72,7 +72,7 @@ LIMIT ? OFFSET ?
 
 }
 
-func (m *MessageStore) GetByPeerID(ctx context.Context, ID int64, limit, offset int64) ([]*entities.Message, error) {
+func (m *Store) GetByPeerID(ctx context.Context, ID int64, limit, offset int64) ([]*entities.Message, error) {
 	query := fmt.Sprintf(`
 SELECT 
 	*
@@ -102,7 +102,7 @@ OFFSET ?`, m.table)
 
 }
 
-func (m *MessageStore) Create(ctx context.Context, q *entities.CreateMessageQuery) (*entities.Message, error) {
+func (m *Store) Create(ctx context.Context, q *entities.CreateMessageQuery) (*entities.Message, error) {
 	query := fmt.Sprintf(`
 INSERT INTO %s
 	(text, chat_id, peer_id)
@@ -131,7 +131,7 @@ RETURNING id
 	}, nil
 }
 
-func (m *MessageStore) Search(ctx context.Context, query string, limit, offset int64) ([]*entities.Message, error) {
+func (m *Store) Search(ctx context.Context, query string, limit, offset int64) ([]*entities.Message, error) {
 	searchQuery := fmt.Sprintf(`
 SELECT 
 	*
@@ -160,7 +160,7 @@ OFFSET ?
 	return messages, nil
 }
 
-func (m *MessageStore) Update(ctx context.Context, q *entities.UpdateMessageQuery) (*entities.Message, error) {
+func (m *Store) Update(ctx context.Context, q *entities.UpdateMessageQuery) (*entities.Message, error) {
 	query := fmt.Sprintf(`
 UPDATE 
 	%s
@@ -189,7 +189,7 @@ WHERE
 
 }
 
-func (m *MessageStore) DeleteByID(ctx context.Context, ID int64) error {
+func (m *Store) DeleteByID(ctx context.Context, ID int64) error {
 	query := fmt.Sprintf(`
 DELETE FROM %s
 WHERE id=?

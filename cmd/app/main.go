@@ -3,7 +3,10 @@ package main
 import (
 	"os"
 	"repositorie/config"
+
 	"repositorie/internal/service/auth"
+	messageService2 "repositorie/internal/service/message"
+	userService2 "repositorie/internal/service/user"
 	"repositorie/internal/storage/postgres/message"
 	"repositorie/internal/storage/postgres/user"
 
@@ -64,12 +67,15 @@ func main() {
 	}
 	log.Info("db connected")
 
-	messageStore := message.NewMessageStore(db, options.MessageTable)
-	userStore := user.NewUserStore(db, options.UsersTable)
+	messageStorage := message.NewMessageStore(db, options.MessageTable)
+	userStorage := user.NewUserStore(db, options.UsersTable)
 
-	authService := auth.NewService(authStore, userService)
+	messageService := messageService2.NewMessageService(*messageStorage)
+	userService := userService2.NewService(userStorage)
 
-	handlers := handler.NewHandler()
+	authService := auth.NewService(userStorage, *messageService, userService)
+
+	handlers := handler.NewHandler(authService)
 
 	srv := new(http2.Server)
 	if err := srv.Run(options.HttpPORT, handlers.InitRoutes()); err != nil {
