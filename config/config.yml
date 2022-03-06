@@ -7,3 +7,6 @@ db:
   port: "5432"
   dbname: "cool_kids"
   sslmode: "disable"
+  tables:
+    user_table: "users"
+    message_table: "messages"

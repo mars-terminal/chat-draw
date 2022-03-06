@@ -1,29 +1,28 @@
-package postgres
+package user
 
 import (
 	"context"
 	"fmt"
+	"repositorie/internal/entities/user"
 	"time"
 
 	"github.com/jmoiron/sqlx"
-
-	"repositorie/internal/entities"
 )
 
-type UserStore struct {
+type Store struct {
 	db *sqlx.DB
 
 	table string
 }
 
-func NewUserStore(db *sqlx.DB, table string) *UserStore {
-	return &UserStore{
+func NewUserStore(db *sqlx.DB, table string) *Store {
+	return &Store{
 		db:    db,
 		table: table,
 	}
 }
 
-func (u *UserStore) GetByID(ctx context.Context, ID int64) (*entities.User, error) {
+func (u *Store) GetByID(ctx context.Context, ID int64) (*user.User, error) {
 	query := fmt.Sprintf("SELECT * FROM %s WHERE id=?", u.table)
 
 	rows, err := u.db.QueryxContext(ctx, query, ID)
@@ -31,7 +30,7 @@ func (u *UserStore) GetByID(ctx context.Context, ID int64) (*entities.User, erro
 		return nil, fmt.Errorf("failet to get by id (user storage): %w", err)
 	}
 
-	user := entities.User{}
+	user := user.User{}
 	for rows.Next() {
 		err := rows.StructScan(&user)
 		if err != nil {
@@ -42,7 +41,7 @@ func (u *UserStore) GetByID(ctx context.Context, ID int64) (*entities.User, erro
 	return &user, nil
 }
 
-func (u *UserStore) GetByIDs(ctx context.Context, IDs []int64) ([]*entities.User, error) {
+func (u *Store) GetByIDs(ctx context.Context, IDs []int64) ([]*user.User, error) {
 	query := fmt.Sprintf("SELECT * FROM %s WHERE id in (?)", u.table)
 
 	rows, err := u.db.QueryxContext(ctx, query, IDs)
@@ -50,9 +49,9 @@ func (u *UserStore) GetByIDs(ctx context.Context, IDs []int64) ([]*entities.User
 		return nil, fmt.Errorf("failet to get by id's (user storage): %w", err)
 	}
 
-	var users []*entities.User
+	var users []*user.User
 	for rows.Next() {
-		var user entities.User
+		var user user.User
 		err := rows.StructScan(&user)
 		if err != nil {
 			return nil, err
@@ -63,7 +62,7 @@ func (u *UserStore) GetByIDs(ctx context.Context, IDs []int64) ([]*entities.User
 	return users, nil
 }
 
-func (u *UserStore) GetByNickName(ctx context.Context, nickName string) ([]*entities.User, error) {
+func (u *Store) GetByNickName(ctx context.Context, nickName string) ([]*user.User, error) {
 	query := fmt.Sprintf("SELECT * FROM %s WHERE nick_name ILIKE '%%?%%'", u.table)
 
 	rows, err := u.db.QueryxContext(ctx, query, nickName)
@@ -71,9 +70,9 @@ func (u *UserStore) GetByNickName(ctx context.Context, nickName string) ([]*enti
 		return nil, fmt.Errorf("failet to get by nick name (user storage): %w", err)
 	}
 
-	var users []*entities.User
+	var users []*user.User
 	for rows.Next() {
-		var user entities.User
+		var user user.User
 		err := rows.StructScan(&user)
 
 		if err != nil {
@@ -86,16 +85,16 @@ func (u *UserStore) GetByNickName(ctx context.Context, nickName string) ([]*enti
 	return users, nil
 }
 
-func (u *UserStore) GetByPhone(ctx context.Context, phone string) ([]*entities.User, error) {
+func (u *Store) GetByPhone(ctx context.Context, phone string) ([]*user.User, error) {
 	query := fmt.Sprintf("SELECT * FROM %s WHERE phone=?", u.table)
 
 	rows, err := u.db.QueryxContext(ctx, query, phone)
 	if err != nil {
 		return nil, fmt.Errorf("failet to get by phone (user storage): %w", err)
 	}
-	var users []*entities.User
+	var users []*user.User
 	for rows.Next() {
-		var user entities.User
+		var user user.User
 		err := rows.StructScan(&user)
 
 		if err != nil {
@@ -106,7 +105,7 @@ func (u *UserStore) GetByPhone(ctx context.Context, phone string) ([]*entities.U
 	return users, nil
 }
 
-func (u *UserStore) Create(ctx context.Context, q *entities.CreateUserQuery) (*entities.User, error) {
+func (u *Store) Create(ctx context.Context, q *user.CreateUserQuery) (*user.User, error) {
 	query := fmt.Sprintf(`
 INSERT INTO %s 
 	(first_name, second_name, nick_name, phone, password)
@@ -125,7 +124,7 @@ RETURNING id
 		return nil, fmt.Errorf("failet to last insert id in create (user storage): %w", err)
 	}
 
-	return &entities.User{
+	return &user.User{
 		ID:         id,
 		FirstName:  q.FirstName,
 		SecondName: q.SecondName,
@@ -137,7 +136,7 @@ RETURNING id
 	}, nil
 }
 
-func (u *UserStore) Update(ctx context.Context, q *entities.UpdateUserQuery) (*entities.User, error) {
+func (u *Store) Update(ctx context.Context, q *user.UpdateUserQuery) (*user.User, error) {
 	query := fmt.Sprintf(`
 UPDATE %s 
 SET 
@@ -168,7 +167,7 @@ WHERE
 	return message, nil
 }
 
-func (u *UserStore) DeleteByID(ctx context.Context, ID int64) error {
+func (u *Store) DeleteByID(ctx context.Context, ID int64) error {
 	query := fmt.Sprintf(`
 DELETE FROM %s 
 WHERE id=?

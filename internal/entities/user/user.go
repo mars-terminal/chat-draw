@@ -1,4 +1,4 @@
-package entities
+package user
 
 import "time"
 
@@ -11,11 +11,6 @@ type User struct {
 	Password   string    `db:"password"`
 	CreatedAt  time.Time `db:"created_at"`
 	UpdatedAt  time.Time `db:"updated_at"`
-}
-
-type UserWithToken struct {
-	User
-	Token Token
 }
 
 type CreateUserQuery struct {

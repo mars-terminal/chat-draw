@@ -2,13 +2,16 @@ package main
 
 import (
 	"os"
+	"repositorie/config"
+	"repositorie/internal/service/auth"
+	"repositorie/internal/storage/postgres/message"
+	"repositorie/internal/storage/postgres/user"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 
 	http2 "repositorie/internal/http"
 	"repositorie/internal/http/handler"
-	"repositorie/internal/storage"
 	"repositorie/internal/storage/postgres"
 )
 
@@ -31,15 +34,20 @@ func main() {
 		DBName     string
 		DBSSLMode  string
 
+		MessageTable string
+		UsersTable   string
+
 		HttpPORT string
 	}{
-		DBHost:     viper.GetString("db.host"),
-		DBPort:     viper.GetString("db.port"),
-		DBUser:     viper.GetString("db.user"),
-		DBPassword: os.Getenv("USE_DB_PASSWORD"),
-		DBName:     viper.GetString("db.dbname"),
-		DBSSLMode:  viper.GetString("db.sslmode"),
-		HttpPORT:   viper.GetString("http.port"),
+		DBHost:       config.GetStringOrDefault(viper.GetViper(), "db.host", "localhost"),
+		DBPort:       viper.GetString("db.port"),
+		DBUser:       viper.GetString("db.user"),
+		DBPassword:   os.Getenv("USE_DB_PASSWORD"),
+		DBName:       viper.GetString("db.dbname"),
+		DBSSLMode:    viper.GetString("db.sslmode"),
+		HttpPORT:     viper.GetString("http.port"),
+		MessageTable: config.GetStringOrDefault(viper.GetViper(), "db.tables.message_table", "messages"),
+		UsersTable:   config.GetStringOrDefault(viper.GetViper(), "db.tables.user_table", "users"),
 	}
 
 	db, err := postgres.NewStore(postgres.Config{
@@ -56,8 +64,12 @@ func main() {
 	}
 	log.Info("db connected")
 
-	repos := storage.NewStorage(db)
-	handlers := handler.NewHandler(repos)
+	messageStore := message.NewMessageStore(db, options.MessageTable)
+	userStore := user.NewUserStore(db, options.UsersTable)
+
+	authService := auth.NewService(authStore, userService)
+
+	handlers := handler.NewHandler()
 
 	srv := new(http2.Server)
 	if err := srv.Run(options.HttpPORT, handlers.InitRoutes()); err != nil {
