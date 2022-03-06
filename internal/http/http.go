@@ -18,8 +18,8 @@ func (s *Server) Run(port string, handler http.Handler) error {
 		Addr:           "0.0.0.0:" + port,
 		Handler:        handler,
 		MaxHeaderBytes: 1 << 20,
-		ReadTimeout:    2 * time.Second,
-		WriteTimeout:   2 * time.Second,
+		ReadTimeout:    1 * time.Second,
+		WriteTimeout:   1 * time.Second,
 	}
 
 	logrus.Infof("http listening at http://localhost:%s", port)
