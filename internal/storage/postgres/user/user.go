@@ -22,99 +22,117 @@ func NewUserStore(db *sqlx.DB, table string) *Store {
 	}
 }
 
-func (u *Store) GetByID(ctx context.Context, ID int64) (*user.User, error) {
-	query := fmt.Sprintf("SELECT * FROM %s WHERE id=?", u.table)
+func (s *Store) GetByID(ctx context.Context, ID int64) (*user.User, error) {
+	query := fmt.Sprintf("SELECT * FROM %s WHERE id=?", s.table)
 
-	rows, err := u.db.QueryxContext(ctx, query, ID)
+	rows, err := s.db.QueryxContext(ctx, query, ID)
 	if err != nil {
 		return nil, fmt.Errorf("failet to get by id (user storage): %w", err)
 	}
 
-	uzer := user.User{}
+	u := user.User{}
 	for rows.Next() {
-		err := rows.StructScan(&uzer)
+		err := rows.StructScan(&u)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	return &uzer, nil
+	return &u, nil
 }
 
-func (u *Store) GetByIDs(ctx context.Context, IDs []int64) ([]*user.User, error) {
-	query := fmt.Sprintf("SELECT * FROM %s WHERE id in (?)", u.table)
+func (s *Store) GetByIDs(ctx context.Context, IDs []int64) ([]*user.User, error) {
+	query := fmt.Sprintf("SELECT * FROM %s WHERE id in (?)", s.table)
 
-	rows, err := u.db.QueryxContext(ctx, query, IDs)
+	rows, err := s.db.QueryxContext(ctx, query, IDs)
 	if err != nil {
 		return nil, fmt.Errorf("failet to get by id's (user storage): %w", err)
 	}
 
 	var users []*user.User
 	for rows.Next() {
-		var uzer user.User
-		err := rows.StructScan(&uzer)
+		var u user.User
+		err := rows.StructScan(&u)
 		if err != nil {
 			return nil, err
 		}
-		users = append(users, &uzer)
+		users = append(users, &u)
 	}
 
 	return users, nil
 }
 
-func (u *Store) GetByNickName(ctx context.Context, nickName string) ([]*user.User, error) {
-	query := fmt.Sprintf("SELECT * FROM %s WHERE nick_name ILIKE '%%?%%'", u.table)
+func (s *Store) GetByNickName(ctx context.Context, nickName string) ([]*user.User, error) {
+	query := fmt.Sprintf("SELECT * FROM %s WHERE nick_name ILIKE '%%?%%'", s.table)
 
-	rows, err := u.db.QueryxContext(ctx, query, nickName)
+	rows, err := s.db.QueryxContext(ctx, query, nickName)
 	if err != nil {
 		return nil, fmt.Errorf("failet to get by nick name (user storage): %w", err)
 	}
 
 	var users []*user.User
 	for rows.Next() {
-		var uzer user.User
-		err := rows.StructScan(&uzer)
+		var u user.User
+		err := rows.StructScan(&u)
 
 		if err != nil {
 			return nil, err
 		}
 
-		users = append(users, &uzer)
+		users = append(users, &u)
 	}
 
 	return users, nil
 }
 
-func (u *Store) GetByPhone(ctx context.Context, phone string) ([]*user.User, error) {
-	query := fmt.Sprintf("SELECT * FROM %s WHERE phone=?", u.table)
+func (s *Store) GetByNickNameAndPasswordHash(ctx context.Context, nickName, passwordHash string) (*user.User, error) {
+	query := fmt.Sprintf("SELECT * FROM %s WHERE nick_name=? AND password=?", s.table)
 
-	rows, err := u.db.QueryxContext(ctx, query, phone)
+	rows, err := s.db.QueryxContext(ctx, query, nickName, passwordHash)
+	if err != nil {
+		return nil, fmt.Errorf("failet to get by nick name and password: %w", err)
+	}
+
+	var u *user.User
+	for rows.Next() {
+		if err := rows.StructScan(&u); err != nil {
+			return nil, err
+		}
+	}
+
+	return u, nil
+}
+
+func (s *Store) GetByPhone(ctx context.Context, phone string) ([]*user.User, error) {
+	query := fmt.Sprintf("SELECT * FROM %s WHERE phone=?", s.table)
+
+	rows, err := s.db.QueryxContext(ctx, query, phone)
 	if err != nil {
 		return nil, fmt.Errorf("failet to get by phone (user storage): %w", err)
 	}
 	var users []*user.User
 	for rows.Next() {
-		var uzer user.User
-		err := rows.StructScan(&uzer)
+		var u user.User
+		err := rows.StructScan(&u)
 
 		if err != nil {
 			return nil, err
 		}
-		users = append(users, &uzer)
+		users = append(users, &u)
 	}
 	return users, nil
 }
 
-func (u *Store) Create(ctx context.Context, q *user.CreateUserQuery) (*user.User, error) {
+func (s *Store) Create(ctx context.Context, q *user.CreateUserQuery) (*user.User, error) {
 	query := fmt.Sprintf(`
 INSERT INTO %s 
 	(first_name, second_name, nick_name, phone, password)
 VALUES 
 	(?, ?, ?, ?, ?)
 RETURNING id
-`, u.table)
+`, s.table)
 
-	result, err := u.db.ExecContext(ctx, query, q.FirstName, q.SecondName, q.NickName, q.Phone, q.Password)
+	result, err := s.db.ExecContext(ctx, query, q.FirstName, q.SecondName, q.NickName, q.Phone, q.Password)
 	if err != nil {
 		return nil, fmt.Errorf("failet to create (user storage): %w", err)
 	}
@@ -136,7 +154,7 @@ RETURNING id
 	}, nil
 }
 
-func (u *Store) Update(ctx context.Context, q *user.UpdateUserQuery) (*user.User, error) {
+func (s *Store) Update(ctx context.Context, q *user.UpdateUserQuery) (*user.User, error) {
 	query := fmt.Sprintf(`
 UPDATE %s 
 SET 
@@ -147,9 +165,9 @@ SET
 	password = ?
 WHERE 
 	id = ?
-`, u.table)
+`, s.table)
 
-	result, err := u.db.ExecContext(ctx, query, q.FirstName, q.SecondName, q.NickName, q.Phone, q.Password, q.ID)
+	result, err := s.db.ExecContext(ctx, query, q.FirstName, q.SecondName, q.NickName, q.Phone, q.Password, q.ID)
 	if err != nil {
 		return nil, fmt.Errorf("failet to update (user storage): %w", err)
 	}
@@ -159,7 +177,7 @@ WHERE
 		return nil, fmt.Errorf("failet to last insert id in update (user store): %w", err)
 	}
 
-	message, err := u.GetByID(ctx, id)
+	message, err := s.GetByID(ctx, id)
 	if err != nil {
 		return nil, fmt.Errorf("failet to get by id in update (user store): %w", err)
 	}
@@ -167,13 +185,13 @@ WHERE
 	return message, nil
 }
 
-func (u *Store) DeleteByID(ctx context.Context, ID int64) error {
+func (s *Store) DeleteByID(ctx context.Context, ID int64) error {
 	query := fmt.Sprintf(`
 DELETE FROM %s 
 WHERE id=?
-`, u.table)
+`, s.table)
 
-	result, err := u.db.ExecContext(ctx, query, ID)
+	result, err := s.db.ExecContext(ctx, query, ID)
 	if err != nil {
 		return fmt.Errorf("failet to delete (user storage): %w", err)
 	}

@@ -6,10 +6,19 @@ import (
 	"repositorie/internal/entities/user"
 )
 
+type AuthStorage interface {
+	IsTokenExists(ctx context.Context, token string) (bool, error)
+
+	SetToken(ctx context.Context, token string) error
+
+	DeleteToken(ctx context.Context, token string) error
+}
+
 type UserStorage interface {
 	GetByID(ctx context.Context, ID int64) (*user.User, error)
 	GetByIDs(ctx context.Context, IDs []int64) ([]*user.User, error)
 	GetByNickName(ctx context.Context, nickName string) ([]*user.User, error)
+	GetByNickNameAndPasswordHash(ctx context.Context, nickName, passwordHash string) (*user.User, error)
 	GetByPhone(ctx context.Context, phone string) ([]*user.User, error)
 
 	Create(ctx context.Context, q *user.CreateUserQuery) (*user.User, error)

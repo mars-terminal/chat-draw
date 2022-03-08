@@ -1,14 +1,17 @@
 package main
 
 import (
+	"context"
 	"os"
 	"repositorie/config"
+	"repositorie/internal/storage/redis"
 
-	"repositorie/internal/service/auth"
-	messageService2 "repositorie/internal/service/message"
-	userService2 "repositorie/internal/service/user"
-	"repositorie/internal/storage/postgres/message"
-	"repositorie/internal/storage/postgres/user"
+	authService "repositorie/internal/service/auth"
+	messageService "repositorie/internal/service/message"
+	userService "repositorie/internal/service/user"
+	messageStorage "repositorie/internal/storage/postgres/message"
+	userStorage "repositorie/internal/storage/postgres/user"
+	authStorage "repositorie/internal/storage/redis/auth"
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -25,41 +28,56 @@ func init() {
 var log = logrus.WithField("package", "main")
 
 func main() {
+	ctx := context.Background()
+
 	if err := InitConfig(); err != nil {
 		log.Fatalf("error initializing configs : %s", err.Error())
 	}
 
 	var options = struct {
-		DBHost     string
-		DBPort     string
-		DBUser     string
-		DBPassword string
-		DBName     string
-		DBSSLMode  string
+		DBPostgresHost     string
+		DBPostgresPort     string
+		DBPostgresUser     string
+		DBPostgresPassword string
+		DBPostgresName     string
+		DBPostgresSSLMode  string
 
-		MessageTable string
-		UsersTable   string
+		RDBHost       string
+		RDBPort       string
+		RDBAuthPrefix string
+		MessageTable  string
+		UsersTable    string
 
 		HttpPORT string
 	}{
-		DBHost:       config.GetStringOrDefault(viper.GetViper(), "db.host", "localhost"),
-		DBPort:       viper.GetString("db.port"),
-		DBUser:       viper.GetString("db.user"),
-		DBPassword:   os.Getenv("USE_DB_PASSWORD"),
-		DBName:       viper.GetString("db.dbname"),
-		DBSSLMode:    viper.GetString("db.sslmode"),
-		HttpPORT:     viper.GetString("http.port"),
-		MessageTable: config.GetStringOrDefault(viper.GetViper(), "db.tables.message_table", "messages"),
-		UsersTable:   config.GetStringOrDefault(viper.GetViper(), "db.tables.user_table", "users"),
+		DBPostgresHost:     config.GetStringOrDefault(viper.GetViper(), "db.postgres.host", "localhost"),
+		DBPostgresPort:     viper.GetString("db.postgres.port"),
+		DBPostgresUser:     viper.GetString("db.postgres.user"),
+		DBPostgresPassword: os.Getenv("USE_DB_PASSWORD"),
+		DBPostgresName:     viper.GetString("db.postgres.dbname"),
+		DBPostgresSSLMode:  viper.GetString("db.postgres.sslmode"),
+		HttpPORT:           viper.GetString("http.port"),
+
+		RDBHost:       viper.GetString("db.redis.host"),
+		RDBPort:       viper.GetString("db.redis.port"),
+		RDBAuthPrefix: config.GetStringOrDefault(viper.GetViper(), "db.redis.prefix.auth", "auth"),
+
+		MessageTable: config.GetStringOrDefault(viper.GetViper(), "db.postgres.tables.message_table", "messages"),
+		UsersTable:   config.GetStringOrDefault(viper.GetViper(), "db.postgres.tables.user_table", "users"),
 	}
 
-	db, err := postgres.NewStore(postgres.Config{
-		Host:     options.DBHost,
-		Port:     options.DBPort,
-		User:     options.DBUser,
-		Password: options.DBPassword,
-		DBName:   options.DBName,
-		SSLMode:  options.DBSSLMode,
+	db, err := postgres.NewStore(ctx, postgres.Config{
+		Host:     options.DBPostgresHost,
+		Port:     options.DBPostgresPort,
+		User:     options.DBPostgresUser,
+		Password: options.DBPostgresPassword,
+		DBName:   options.DBPostgresName,
+		SSLMode:  options.DBPostgresSSLMode,
+	})
+
+	rdb, err := redis.NewRedisStorage(ctx, redis.Config{
+		Host: options.RDBHost,
+		Port: options.RDBPort,
 	})
 
 	if err != nil {
@@ -67,15 +85,15 @@ func main() {
 	}
 	log.Info("db connected")
 
-	messageStorage := message.NewMessageStore(db, options.MessageTable)
-	userStorage := user.NewUserStore(db, options.UsersTable)
+	storageMessage := messageStorage.NewMessageStore(db, options.MessageTable)
+	storageUser := userStorage.NewUserStore(db, options.UsersTable)
+	storageAuth := authStorage.NewAuthStorage(rdb, options.RDBAuthPrefix)
 
-	messageService := messageService2.NewMessageService(*messageStorage)
-	userService := userService2.NewService(userStorage)
+	serviceMessage := messageService.NewMessageService(storageMessage)
+	serviceUser := userService.NewService(storageUser)
+	serviceAuth := authService.NewService(storageAuth, serviceUser, serviceMessage)
 
-	authService := auth.NewService(userStorage, *messageService, userService)
-
-	handlers := handler.NewHandler(authService)
+	handlers := handler.NewHandler(serviceAuth)
 
 	srv := new(http2.Server)
 	if err := srv.Run(options.HttpPORT, handlers.InitRoutes()); err != nil {

@@ -6,6 +6,10 @@ import (
 )
 
 func (s *Service) SignIn(ctx context.Context, q *auth.SignInQuery) (*auth.Tokens, error) {
-	//TODO implement me
-	panic("implement me")
+	u, err := s.userService.GetByNickNameAndPasswordHash(ctx, q.NickName, s.generatePasswordHash(q.Password))
+	if err != nil {
+		return nil, err
+	}
+
+	return s.generateTokens(ctx, u)
 }
