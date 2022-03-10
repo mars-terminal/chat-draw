@@ -1,0 +1,116 @@
+basePath: /
+definitions:
+  auth.SignInQuery:
+    properties:
+      nick_name:
+        minLength: 1
+        type: string
+      password:
+        minLength: 8
+        type: string
+    type: object
+  auth.SignUpQuery:
+    properties:
+      first_name:
+        type: string
+      nick_name:
+        type: string
+      password:
+        minLength: 8
+        type: string
+      phone:
+        type: string
+      second_name:
+        type: string
+    type: object
+  auth.Tokens:
+    properties:
+      access_token:
+        type: string
+      expire_at:
+        type: integer
+      refresh_token:
+        type: string
+    type: object
+  entities.ErrorResponse:
+    properties:
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+host: localhost:8000
+info:
+  contact:
+    name: API Support
+    url: https://google.com
+  description: ChatDraw API specs.
+  title: ChatDraw API
+  version: "1.0"
+paths:
+  /auth/sign-in:
+    post:
+      consumes:
+      - application/json
+      description: Gets body and Authenticate user if exists.
+      parameters:
+      - description: Request payload
+        in: body
+        name: SignUpQuery
+        required: true
+        schema:
+          $ref: '#/definitions/auth.SignInQuery'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.Tokens'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Signs In the user.
+      tags:
+      - auth
+  /auth/sign-up:
+    post:
+      consumes:
+      - application/json
+      description: Gets body and create user if not exists.
+      parameters:
+      - description: Request payload
+        in: body
+        name: SignUpQuery
+        required: true
+        schema:
+          $ref: '#/definitions/auth.SignUpQuery'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.Tokens'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Signs Up new user.
+      tags:
+      - auth
+securityDefinitions:
+  APIToken @in header @name Authorization:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

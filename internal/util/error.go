@@ -1,35 +1,29 @@
 package util
 
 import (
+	"encoding/json"
 	"errors"
-	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"net/http"
-)
-
-var (
-	ErrForbidden    = errors.New("access denied")
-	ErrBadRequest   = errors.New("bad request")
-	ErrNotFound     = errors.New("not found")
-	ErrUnauthorized = errors.New("unauthorized")
+	"repositorie/internal/entities"
 )
 
 func ParseErrorToHTTPErrorCode(err error) int {
 	switch {
-	case errors.Is(err, ErrForbidden):
+	case errors.Is(err, entities.ErrForbidden):
 		return http.StatusForbidden
-	case errors.Is(err, ErrBadRequest):
+	case errors.Is(err, entities.ErrBadRequest):
 		return http.StatusBadRequest
-	case errors.Is(err, ErrNotFound):
+	case errors.Is(err, entities.ErrNotFound):
 		return http.StatusNotFound
-	case errors.Is(err, ErrUnauthorized):
+	case errors.Is(err, entities.ErrUnauthorized):
 		return http.StatusUnauthorized
 	}
 
 	return http.StatusInternalServerError
 }
 
-func NewErrorResponse(logger *logrus.Entry, c *gin.Context, status int, message string) {
+func NewErrorResponse(logger *logrus.Entry, w http.ResponseWriter, status int, message string) {
 	switch status {
 	case http.StatusInternalServerError:
 		fallthrough
@@ -38,8 +32,9 @@ func NewErrorResponse(logger *logrus.Entry, c *gin.Context, status int, message 
 		status = http.StatusInternalServerError
 	}
 
-	c.AbortWithStatusJSON(status, map[string]interface{}{
-		"status":  status,
-		"message": message,
+	w.WriteHeader(status)
+	_ = json.NewEncoder(w).Encode(&entities.ErrorResponse{
+		Status:  status,
+		Message: message,
 	})
 }

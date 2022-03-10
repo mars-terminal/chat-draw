@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 	"repositorie/internal/entities/auth"
+	"repositorie/internal/entities/user"
 )
 
 func (s *Service) SignIn(ctx context.Context, q *auth.SignInQuery) (*auth.Tokens, error) {
@@ -12,4 +13,13 @@ func (s *Service) SignIn(ctx context.Context, q *auth.SignInQuery) (*auth.Tokens
 	}
 
 	return s.generateTokens(ctx, u)
+}
+
+func (s *Service) GetUserByToken(ctx context.Context, token string) (*user.User, error) {
+	userID, err := s.authStorage.GetUserIDByToken(ctx, token)
+	if err != nil {
+		return nil, err
+	}
+
+	return s.userService.GetByID(ctx, userID)
 }

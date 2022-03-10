@@ -8,7 +8,7 @@ import (
 	"repositorie/internal/entities/user"
 )
 
-func (s *Service) SignUp(ctx context.Context, q *auth.SignUpQuery, userID string) (*auth.Tokens, error) {
+func (s *Service) SignUp(ctx context.Context, q *auth.SignUpQuery) (*auth.Tokens, error) {
 	q.Password = s.generatePasswordHash(q.Password)
 
 	u, err := s.userService.Create(ctx, &user.CreateUserQuery{

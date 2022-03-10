@@ -22,7 +22,10 @@ func (s *Server) Run(port string, handler http.Handler) error {
 		WriteTimeout:   1 * time.Second,
 	}
 
-	logrus.Infof("http listening at http://localhost:%s", port)
+	logrus.WithFields(logrus.Fields{
+		"package": "internal.server",
+		"layer":   "server",
+	}).Infof("server listening at http://localhost:%s", port)
 
 	return s.httpServer.ListenAndServe()
 }

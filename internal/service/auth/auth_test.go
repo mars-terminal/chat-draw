@@ -32,7 +32,7 @@ func TestService_generateRefreshToken(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			s := &Service{
 				salt:           tt.fields.salt,
-				signInKey:      tt.fields.signInKey,
+				signKey:        tt.fields.signInKey,
 				tokenTTL:       tt.fields.tokenTTL,
 				authStorage:    tt.fields.authStorage,
 				userStorage:    tt.fields.userStorage,

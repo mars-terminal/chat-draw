@@ -10,6 +10,6 @@ type Storage struct {
 	prefix string
 }
 
-func NewAuthStorage(db *redis.Client, prefix string) *Storage {
+func NewStore(db *redis.Client, prefix string) *Storage {
 	return &Storage{db: db, prefix: prefix}
 }

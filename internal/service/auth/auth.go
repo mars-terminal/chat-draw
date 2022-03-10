@@ -15,9 +15,9 @@ import (
 )
 
 type Service struct {
-	salt      string
-	signInKey string
-	tokenTTL  time.Duration
+	salt     string
+	signKey  string
+	tokenTTL time.Duration
 
 	authStorage storage.AuthStorage
 
@@ -26,12 +26,19 @@ type Service struct {
 }
 
 func NewService(
+	salt string,
+	signInKey string,
+	tokenTTL time.Duration,
+
 	authStorage storage.AuthStorage,
 	userService service.UserService,
 	messageService service.MessageService,
 ) *Service {
 
 	return &Service{
+		salt:           salt,
+		signKey:        signInKey,
+		tokenTTL:       tokenTTL,
 		authStorage:    authStorage,
 		userService:    userService,
 		messageService: messageService,
@@ -44,7 +51,7 @@ func (s *Service) generateAccessToken(user *user.User, expireAt int64) (string, 
 		Subject:   strconv.FormatInt(user.ID, 10),
 	})
 
-	return token.SignedString([]byte(s.signInKey))
+	return token.SignedString([]byte(s.signKey))
 }
 
 func (s *Service) generateRefreshToken() (string, error) {
@@ -67,11 +74,11 @@ func (s *Service) generateTokens(ctx context.Context, u *user.User) (*auth.Token
 		return nil, err
 	}
 
-	if err = s.authStorage.SetToken(ctx, accessToken); err != nil {
+	if err = s.authStorage.SetToken(ctx, accessToken, u.ID, s.tokenTTL); err != nil {
 		return nil, err
 	}
 
-	if err = s.authStorage.SetToken(ctx, refreshToken); err != nil {
+	if err = s.authStorage.SetToken(ctx, refreshToken, u.ID, s.tokenTTL*2); err != nil {
 		return nil, err
 	}
 

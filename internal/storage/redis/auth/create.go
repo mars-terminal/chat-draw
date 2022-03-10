@@ -1,9 +1,12 @@
 package auth
 
-import "context"
+import (
+	"context"
+	"time"
+)
 
-func (s *Storage) SetToken(ctx context.Context, token string) error {
-	if cmd := s.db.Set(ctx, s.prefix+token, "", 0); cmd.Err() != nil {
+func (s *Storage) SetToken(ctx context.Context, token string, userID int64, ttl time.Duration) error {
+	if cmd := s.db.Set(ctx, s.prefix+token, userID, ttl); cmd.Err() != nil {
 		return cmd.Err()
 	}
 

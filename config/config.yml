@@ -1,12 +1,18 @@
 http:
   port: "8000"
 
+auth:
+  salt: "sdgfuhbjniklrthgjikutgrfdikjol;,./m rtdfgcvbsxjik;m l,./thrfgvbcdytghfcvdjm ikl;,./tyfghvbcd j;m kl,./"
+  sign_key: "asdjikm,lo ;.45rtegujioklertdfscgvxujn iklm,.cfghtv/bdrsxrtdfgcbvujn iklm,./"
+  token_ttl: 72h
+
 db:
   postgres:
     user: "rustam"
-    host: "192.168.1.138"
+    password: "1234"
+    host: "localhost"
     port: "5432"
-    dbname: "cool_kids"
+    dbname: "rustam"
     sslmode: "disable"
     tables:
       user_table: "users"

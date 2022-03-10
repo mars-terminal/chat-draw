@@ -5,9 +5,9 @@ import (
 )
 
 type Tokens struct {
-	AccessToken  string
-	RefreshToken string
-	ExpireAt     int64
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
+	ExpireAt     int64  `json:"expire_at"`
 }
 
 type SignInQuery struct {

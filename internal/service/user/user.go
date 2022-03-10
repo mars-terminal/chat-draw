@@ -2,6 +2,8 @@ package user
 
 import (
 	"context"
+	"errors"
+	"repositorie/internal/entities"
 	"repositorie/internal/entities/user"
 	"repositorie/internal/storage"
 )
@@ -23,25 +25,31 @@ func (s *Service) GetByIDs(ctx context.Context, IDs []int64) ([]*user.User, erro
 }
 
 func (s *Service) GetByNickName(ctx context.Context, nickName string) ([]*user.User, error) {
-	return s.GetByNickName(ctx, nickName)
+	return s.storage.GetByNickName(ctx, nickName)
 }
 
 func (s *Service) GetByNickNameAndPasswordHash(ctx context.Context, nickName, passwordHash string) (*user.User, error) {
-	return s.GetByNickNameAndPasswordHash(ctx, nickName, passwordHash)
+	return s.storage.GetByNickNameAndPasswordHash(ctx, nickName, passwordHash)
 }
 
 func (s *Service) GetByPhone(ctx context.Context, phone string) ([]*user.User, error) {
-	return s.GetByPhone(ctx, phone)
+	return s.storage.GetByPhone(ctx, phone)
 }
 
 func (s *Service) Create(ctx context.Context, q *user.CreateUserQuery) (*user.User, error) {
-	return s.Create(ctx, q)
+	_, err := s.storage.GetByNickNameStrict(ctx, q.NickName)
+
+	if err != nil && !errors.Is(err, entities.ErrNotFound) {
+		return nil, err
+	}
+
+	return s.storage.Create(ctx, q)
 }
 
 func (s *Service) Update(ctx context.Context, q *user.UpdateUserQuery) (*user.User, error) {
-	return s.Update(ctx, q)
+	return s.storage.Update(ctx, q)
 }
 
 func (s *Service) DeleteByID(ctx context.Context, ID int64) error {
-	return s.DeleteByID(ctx, ID)
+	return s.storage.DeleteByID(ctx, ID)
 }

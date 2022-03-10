@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq"
 )
 
 type Config struct {
@@ -18,7 +19,7 @@ type Config struct {
 
 func NewStore(ctx context.Context, cfg Config) (*sqlx.DB, error) {
 	dataSourceName := fmt.Sprintf(
-		"username=%s password=%s host=%s port=%s dbname=%s sslmode=%s",
+		"user=%s password=%s host=%s port=%s dbname=%s sslmode=%s",
 		cfg.User, cfg.Password, cfg.Host, cfg.Port, cfg.DBName, cfg.SSLMode,
 	)
 
