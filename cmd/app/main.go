@@ -1,27 +1,37 @@
 package main
 
 import (
-	"context"
-	"github.com/gin-gonic/gin"
-	"repositorie/config"
-	http2 "repositorie/internal/server/http"
 
-	"repositorie/internal/storage/redis"
+	//Standard library
+	"context"
 	"time"
 
+	//GITHUB
+	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
+
+	//Servers
+	http2 "repositorie/internal/server/http"
 	authHandler "repositorie/internal/server/http/auth"
 	docsHandler "repositorie/internal/server/http/docs"
 	userHandler "repositorie/internal/server/http/user"
+
+	//Service
 	authService "repositorie/internal/service/auth"
 	messageService "repositorie/internal/service/message"
 	userService "repositorie/internal/service/user"
+
+	//Storages
 	messageStorage "repositorie/internal/storage/postgres/message"
 	userStorage "repositorie/internal/storage/postgres/user"
 	authStorage "repositorie/internal/storage/redis/auth"
 
-	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 	"repositorie/internal/storage/postgres"
+	"repositorie/internal/storage/redis"
+
+	//Config
+	"repositorie/config"
 )
 
 func init() {
@@ -90,7 +100,6 @@ func main() {
 		AuthSignKey:  viper.GetString("auth.sign_key"),
 		AuthTokenTTL: viper.GetDuration("auth.token_ttl"),
 	}
-
 	log.Info(options)
 
 	db, err := postgres.NewStore(ctx, postgres.Config{
@@ -101,7 +110,6 @@ func main() {
 		DBName:   options.DBPostgresName,
 		SSLMode:  options.DBPostgresSSLMode,
 	})
-
 	if err != nil {
 		log.WithError(err).Fatal("failed to initialize postgres store")
 	}
@@ -110,7 +118,6 @@ func main() {
 		Host: options.RDBHost,
 		Port: options.RDBPort,
 	})
-
 	if err != nil {
 		log.WithError(err).Fatal("failed to initialize redis store")
 	}
