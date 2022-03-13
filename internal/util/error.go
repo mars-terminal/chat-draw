@@ -3,9 +3,10 @@ package util
 import (
 	"encoding/json"
 	"errors"
-	"github.com/sirupsen/logrus"
 	"net/http"
 	"repositorie/internal/entities"
+
+	"github.com/sirupsen/logrus"
 )
 
 func ParseErrorToHTTPErrorCode(err error) int {
@@ -33,7 +34,7 @@ func NewErrorResponse(logger *logrus.Entry, w http.ResponseWriter, status int, m
 	}
 
 	w.WriteHeader(status)
-	_ = json.NewEncoder(w).Encode(&entities.ErrorResponse{
+	_ = json.NewEncoder(w).Encode(&entities.Response{
 		Status:  status,
 		Message: message,
 	})

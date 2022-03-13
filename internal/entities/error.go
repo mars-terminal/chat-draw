@@ -9,7 +9,7 @@ var (
 	ErrUnauthorized = errors.New("unauthorized")
 )
 
-type ErrorResponse struct {
+type Response struct {
 	Status  int    `json:"status"`
 	Message string `json:"message"`
 }

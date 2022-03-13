@@ -6,38 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"repositorie/internal/entities/user"
-	"repositorie/internal/service"
 	"repositorie/internal/util"
 )
-
-// settings godoc
-// @Summary      Showing user fields.
-// @Description  Gets user if everything OK gives back user with fields.
-// @Tags         users
-// @Accept       json
-// @Produce      json
-// @Success      200  {object}  auth.Tokens
-// @Failure      400  {object}  entities.ErrorResponse
-// @Failure      500  {object}  entities.ErrorResponse
-// @Router       /users/settings [get]
-func (h *Handler) settings(c *gin.Context) {
-	logger := log.WithField("user", "settings")
-
-	u, err := service.GetUserFromContext(c)
-
-	if err != nil {
-		util.NewErrorResponse(logger, c.Writer, util.ParseErrorToHTTPErrorCode(err), err.Error())
-		return
-	}
-
-	c.JSON(http.StatusOK, &user.User{
-		ID:         u.ID,
-		FirstName:  u.FirstName,
-		SecondName: u.SecondName,
-		NickName:   u.NickName,
-		Phone:      u.Phone,
-	})
-}
 
 // update godoc
 // @Summary      Updating user fields.

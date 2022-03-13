@@ -1,12 +1,13 @@
 package auth
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/go-http-utils/headers"
 	"net/http"
 	"repositorie/internal/entities"
 	"repositorie/internal/service"
 	"strings"
+
+	"github.com/gin-gonic/gin"
+	"github.com/go-http-utils/headers"
 )
 
 type Handler struct {
@@ -29,7 +30,7 @@ func (h *Handler) Middleware() gin.HandlerFunc {
 		authHeader := strings.Split(c.GetHeader(headers.Authorization), " ")
 
 		if len(authHeader) != 2 && authHeader[0] != TokenPrefix {
-			c.AbortWithStatusJSON(http.StatusUnauthorized, &entities.ErrorResponse{
+			c.AbortWithStatusJSON(http.StatusUnauthorized, &entities.Response{
 				Message: "invalid auth header",
 				Status:  http.StatusUnauthorized,
 			})
