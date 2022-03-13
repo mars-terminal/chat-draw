@@ -1,29 +1,30 @@
-package user
+package message
 
 import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 
-	"repositorie/internal/entities/user"
+	"repositorie/internal/entities/message"
 	"repositorie/internal/util"
 )
 
-// update godoc
-// @Summary      Updating user fields.
-// @Description  Gets user if everything OK gives back updated user.
-// @Tags         users
+// create godoc
+// @Summary      Create message.
+// @Description  Gets body and  if everything is OK creating message.
+// @Tags         messages
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}  auth.Tokens
+// @Param		 CreateMessageQuery body message.CreateMessageQuery true "Request payload"
+// @Success      200  {array} 	message.Message
 // @Failure      400  {object}  entities.Response
 // @Failure      500  {object}  entities.Response
 // @Security 	ApiKeyAuth
-// @Router       /users/update [put]
-func (h *Handler) update(c *gin.Context) {
-	logger := log.WithField("user", "update")
+// @Router       /message/create [post]
+func (h *Handler) create(c *gin.Context) {
+	logger := log.WithField("message", "create")
 
-	var body user.UpdateUserQuery
+	var body message.CreateMessageQuery
 
 	if err := c.BindJSON(&body); err != nil {
 		util.NewErrorResponse(logger, c.Writer, util.ParseErrorToHTTPErrorCode(err), err.Error())
@@ -35,11 +36,11 @@ func (h *Handler) update(c *gin.Context) {
 		return
 	}
 
-	u, err := h.Service.Update(c, &body)
+	m, err := h.Service.Create(c, &body)
 	if err != nil {
 		util.NewErrorResponse(logger, c.Writer, util.ParseErrorToHTTPErrorCode(err), err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, u)
+	c.JSON(http.StatusOK, m)
 }

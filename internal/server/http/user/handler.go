@@ -8,7 +8,7 @@ import (
 )
 
 var log = logrus.WithFields(logrus.Fields{
-	"package": "auth",
+	"package": "user",
 	"layer":   "server",
 })
 
@@ -25,6 +25,6 @@ func (h *Handler) InitRoutes(r gin.IRouter) {
 
 	group.GET("/me", h.me)
 	group.GET("/search/:query", h.search)
-	group.GET("/settings", h.settings)
 	group.PUT("/update", h.update)
+	group.DELETE("/delete", h.delete)
 }

@@ -21,7 +21,7 @@ func NewHandler(service service.AuthService) *Handler {
 func (h *Handler) InitRoutes(r gin.IRouter) {
 	group := r.Group("/auth")
 
-	group.POST("/sing-in", h.signIn)
+	group.POST("/sign-in", h.signIn)
 	group.POST("/sign-up", h.signUp)
 }
 

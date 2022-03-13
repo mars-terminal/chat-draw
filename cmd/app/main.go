@@ -4,6 +4,7 @@ import (
 
 	//Standard library
 	"context"
+	messageHandler "repositorie/internal/server/http/message"
 	"time"
 
 	//GITHUB
@@ -50,7 +51,7 @@ var log = logrus.WithField("package", "main")
 // @host      localhost:8000
 // @BasePath  /
 
-// @securityDefinitions.apikey APIToken @in header @name Authorization
+// @securityDefinitions.apikey ApiKeyAuth
 // @in header
 // @name Authorization
 func main() {
@@ -134,12 +135,18 @@ func main() {
 	handlerAuth := authHandler.NewHandler(serviceAuth)
 	handlerDocs := docsHandler.NewHandler(options.HttpPORT)
 	handlerUsers := userHandler.NewHandler(serviceUser)
+	handlerMessages := messageHandler.NewHandler(serviceMessage)
 
 	r := gin.New()
 
 	handlerDocs.InitRoutes(r)
 	handlerAuth.InitRoutes(r)
-	handlerUsers.InitRoutes(r.Group("/", handlerAuth.Middleware()))
+	{
+		authGroup := r.Group("/", handlerAuth.Middleware())
+
+		handlerUsers.InitRoutes(authGroup)
+		handlerMessages.InitRoutes(authGroup)
+	}
 
 	srv := new(http2.Server)
 	if err := srv.Run(options.HttpPORT, r); err != nil {

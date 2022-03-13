@@ -3,6 +3,7 @@ package user
 import (
 	"context"
 	"errors"
+	"fmt"
 	"repositorie/internal/entities"
 	"repositorie/internal/entities/user"
 	"repositorie/internal/storage"
@@ -38,6 +39,9 @@ func (s *Service) GetByPhone(ctx context.Context, phone string) ([]*user.User, e
 
 func (s *Service) Create(ctx context.Context, q *user.CreateUserQuery) (*user.User, error) {
 	_, err := s.storage.GetByNickNameStrict(ctx, q.NickName)
+	if err == nil {
+		return nil, fmt.Errorf("user already exists: %w", entities.ErrForbidden)
+	}
 
 	if err != nil && !errors.Is(err, entities.ErrNotFound) {
 		return nil, err

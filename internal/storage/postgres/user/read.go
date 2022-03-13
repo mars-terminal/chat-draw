@@ -75,20 +75,17 @@ func (s *Store) GetByNickNameStrict(ctx context.Context, nickName string) (*user
 	query := fmt.Sprintf("SELECT * FROM %s WHERE nick_name = $1", s.table)
 
 	row := s.db.QueryRowxContext(ctx, query, nickName)
-	if err := row.Err(); err != nil {
+
+	var u user.User
+	err := row.StructScan(&u)
+	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, fmt.Errorf("user: %w", entities.ErrNotFound)
 		}
 		return nil, fmt.Errorf("failed to get by strict nickname: %w", err)
 	}
 
-	var u *user.User
-	err := row.Scan(&u)
-	if err != nil {
-		return nil, err
-	}
-
-	return u, nil
+	return &u, nil
 }
 
 func (s *Store) GetByNickNameAndPasswordHash(ctx context.Context, nickName, passwordHash string) (*user.User, error) {
@@ -99,13 +96,13 @@ func (s *Store) GetByNickNameAndPasswordHash(ctx context.Context, nickName, pass
 		return nil, err
 	}
 
-	var u *user.User
-	err := row.Scan(&u)
+	var u user.User
+	err := row.StructScan(&u)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get by nick name and password: %w", err)
 	}
 
-	return u, nil
+	return &u, nil
 }
 
 func (s *Store) GetByPhone(ctx context.Context, phone string) ([]*user.User, error) {

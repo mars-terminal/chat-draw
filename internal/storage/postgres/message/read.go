@@ -18,13 +18,13 @@ func (s *Store) GetByID(ctx context.Context, ID int64) (*message.Message, error)
 		}
 		return nil, fmt.Errorf("failed to find message by id: %w", err)
 	}
-	var m *message.Message
-	err := row.Scan(&m)
+	var m message.Message
+	err := row.StructScan(&m)
 	if err != nil {
 		return nil, err
 	}
 
-	return m, nil
+	return &m, nil
 }
 
 func (s *Store) GetByChatID(ctx context.Context, ID int64, limit, offset int64) ([]*message.Message, error) {

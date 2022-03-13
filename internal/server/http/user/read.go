@@ -18,8 +18,9 @@ import (
 // @Accept       json
 // @Produce      json
 // @Success      200  {object}  auth.Tokens
-// @Failure      400  {object}  entities.ErrorResponse
-// @Failure      500  {object}  entities.ErrorResponse
+// @Failure      400  {object}  entities.Response
+// @Failure      500  {object}  entities.Response
+// @Security 	ApiKeyAuth
 // @Router       /users/me [get]
 func (h *Handler) me(c *gin.Context) {
 	logger := log.WithField("user", "me")
@@ -36,6 +37,7 @@ func (h *Handler) me(c *gin.Context) {
 		FirstName:  u.FirstName,
 		SecondName: u.SecondName,
 		NickName:   u.NickName,
+		Phone:      u.Phone,
 	})
 }
 
@@ -47,8 +49,9 @@ func (h *Handler) me(c *gin.Context) {
 // @Produce      json
 // @Param		 Query path string true "query nickname or id"
 // @Success      200  {object}  auth.Tokens
-// @Failure      400  {object}  entities.ErrorResponse
-// @Failure      500  {object}  entities.ErrorResponse
+// @Failure      400  {object}  entities.Response
+// @Failure      500  {object}  entities.Response
+// @Security 	ApiKeyAuth
 // @Router       /users/search/{query} [get]
 func (h *Handler) search(c *gin.Context) {
 	logger := log.WithField("user", "search")

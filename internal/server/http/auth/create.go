@@ -1,10 +1,11 @@
 package auth
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"repositorie/internal/entities/auth"
 	"repositorie/internal/util"
+
+	"github.com/gin-gonic/gin"
 )
 
 // signUp godoc
@@ -15,8 +16,8 @@ import (
 // @Produce      json
 // @Param        SignUpQuery body auth.SignUpQuery true "Request payload"
 // @Success      200  {object}  auth.Tokens
-// @Failure      400  {object}  entities.ErrorResponse
-// @Failure      500  {object}  entities.ErrorResponse
+// @Failure      400  {object}  entities.Response
+// @Failure      500  {object}  entities.Response
 // @Router       /auth/sign-up [post]
 func (h *Handler) signUp(c *gin.Context) {
 	logger := log.WithField("handler", "signUp")

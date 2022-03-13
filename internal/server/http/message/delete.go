@@ -1,4 +1,4 @@
-package user
+package message
 
 import (
 	"net/http"
@@ -10,18 +10,18 @@ import (
 )
 
 // delete godoc
-// @Summary      Deleting user.
-// @Description  Gets user id if everything OK deleting user.
-// @Tags         users
+// @Summary      Deleting message.
+// @Description  Gets message id if everything is OK deleting message.
+// @Tags         messages
 // @Accept       json
 // @Produce      json
-// @Success      200  {object}  auth.Tokens
+// @Success      200  {array} 	message.Message
 // @Failure      400  {object}  entities.Response
 // @Failure      500  {object}  entities.Response
 // @Security 	ApiKeyAuth
-// @Router       /users/delete [delete]
+// @Router       /message/delete [delete]
 func (h *Handler) delete(c *gin.Context) {
-	logger := log.WithField("user", "delete")
+	logger := log.WithField("message", "delete")
 
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {

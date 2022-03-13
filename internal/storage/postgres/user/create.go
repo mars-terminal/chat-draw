@@ -16,12 +16,10 @@ VALUES
 RETURNING id
 `, s.table)
 
-	result, err := s.db.ExecContext(ctx, query, q.FirstName, q.SecondName, q.NickName, q.Phone, q.Password)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create (user storage): %w", err)
-	}
+	row := s.db.QueryRowxContext(ctx, query, q.FirstName, q.SecondName, q.NickName, q.Phone, q.Password)
 
-	id, err := result.LastInsertId()
+	var id int64
+	err := row.StructScan(&id)
 	if err != nil {
 		return nil, fmt.Errorf("failed to last insert id in create (user storage): %w", err)
 	}
