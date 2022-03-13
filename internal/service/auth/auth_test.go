@@ -13,7 +13,6 @@ func TestService_generateRefreshToken(t *testing.T) {
 		signInKey      string
 		tokenTTL       time.Duration
 		authStorage    storage.AuthStorage
-		userStorage    storage.UserStorage
 		userService    service.UserService
 		messageService service.MessageService
 	}
@@ -35,7 +34,6 @@ func TestService_generateRefreshToken(t *testing.T) {
 				signKey:        tt.fields.signInKey,
 				tokenTTL:       tt.fields.tokenTTL,
 				authStorage:    tt.fields.authStorage,
-				userStorage:    tt.fields.userStorage,
 				userService:    tt.fields.userService,
 				messageService: tt.fields.messageService,
 			}

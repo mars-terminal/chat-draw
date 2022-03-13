@@ -57,7 +57,6 @@ paths:
       - description: Request payload
         in: body
         name: SignUpQuery
-        required: true
         schema:
           $ref: '#/definitions/auth.SignInQuery'
       produces:
@@ -108,6 +107,104 @@ paths:
       summary: Signs Up new user.
       tags:
       - auth
+  /users/me:
+    get:
+      consumes:
+      - application/json
+      description: Gets user if everything OK gives back user with 4 fields.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.Tokens'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Showing users profile.
+      tags:
+      - users
+  /users/search/{query}:
+    get:
+      consumes:
+      - application/json
+      description: Gets user ID or Nick Name if everything OK gives back user.
+      parameters:
+      - description: query nickname or id
+        in: path
+        name: Query
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.Tokens'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Searching by Nick Name of ID.
+      tags:
+      - users
+  /users/settings:
+    get:
+      consumes:
+      - application/json
+      description: Gets user if everything OK gives back user with fields.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.Tokens'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Showing user fields.
+      tags:
+      - users
+  /users/update:
+    put:
+      consumes:
+      - application/json
+      description: Gets user if everything OK gives back updated user.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.Tokens'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.ErrorResponse'
+      summary: Updating user fields.
+      tags:
+      - users
 securityDefinitions:
   APIToken @in header @name Authorization:
     in: header
