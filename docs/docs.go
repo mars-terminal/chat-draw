@@ -228,7 +228,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/message/delete": {
+        "/message/delete/{id}": {
             "delete": {
                 "security": [
                     {
@@ -246,6 +246,15 @@ const docTemplate = `{
                     "messages"
                 ],
                 "summary": "Deleting message.",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "message id",
+                        "name": "DeleteByID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -417,6 +426,17 @@ const docTemplate = `{
                     "messages"
                 ],
                 "summary": "Updating message.",
+                "parameters": [
+                    {
+                        "description": "message update",
+                        "name": "UpdateMessageQuery",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/message.UpdateMessageQuery"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -705,6 +725,17 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "message.UpdateMessageQuery": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "text": {
                     "type": "string"
                 }
             }

@@ -1,8 +1,8 @@
 package service
 
 import (
-	"repositorie/internal/entities"
-	"repositorie/internal/entities/user"
+	"github.com/mars-terminal/chat-draw/internal/entities"
+	"github.com/mars-terminal/chat-draw/internal/entities/user"
 
 	"github.com/gin-gonic/gin"
 )

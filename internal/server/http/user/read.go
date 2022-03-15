@@ -6,9 +6,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"repositorie/internal/entities/user"
-	"repositorie/internal/service"
-	"repositorie/internal/util"
+	"github.com/mars-terminal/chat-draw/internal/entities/user"
+	"github.com/mars-terminal/chat-draw/internal/service"
+	"github.com/mars-terminal/chat-draw/internal/util"
 )
 
 // me godoc
@@ -20,7 +20,7 @@ import (
 // @Success      200  {object}  auth.Tokens
 // @Failure      400  {object}  entities.Response
 // @Failure      500  {object}  entities.Response
-// @Security 	ApiKeyAuth
+// @Security 	 ApiKeyAuth
 // @Router       /users/me [get]
 func (h *Handler) me(c *gin.Context) {
 	logger := log.WithField("user", "me")
@@ -51,7 +51,7 @@ func (h *Handler) me(c *gin.Context) {
 // @Success      200  {object}  auth.Tokens
 // @Failure      400  {object}  entities.Response
 // @Failure      500  {object}  entities.Response
-// @Security 	ApiKeyAuth
+// @Security 	 ApiKeyAuth
 // @Router       /users/search/{query} [get]
 func (h *Handler) search(c *gin.Context) {
 	logger := log.WithField("user", "search")

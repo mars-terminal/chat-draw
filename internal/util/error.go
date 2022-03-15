@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
-	"repositorie/internal/entities"
+
+	"github.com/mars-terminal/chat-draw/internal/entities"
 
 	"github.com/sirupsen/logrus"
 )

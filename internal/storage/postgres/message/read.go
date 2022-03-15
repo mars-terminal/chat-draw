@@ -4,12 +4,13 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"repositorie/internal/entities"
-	"repositorie/internal/entities/message"
+
+	"github.com/mars-terminal/chat-draw/internal/entities"
+	"github.com/mars-terminal/chat-draw/internal/entities/message"
 )
 
 func (s *Store) GetByID(ctx context.Context, ID int64) (*message.Message, error) {
-	query := fmt.Sprintf(`SELECT * FROM %s WHERE id=$1`, s.table)
+	query := fmt.Sprintf(`SELECT id FROM %s WHERE id=$1`, s.table)
 
 	row := s.db.QueryRowxContext(ctx, query, ID)
 	if err := row.Err(); err != nil {
@@ -30,7 +31,7 @@ func (s *Store) GetByID(ctx context.Context, ID int64) (*message.Message, error)
 func (s *Store) GetByChatID(ctx context.Context, ID int64, limit, offset int64) ([]*message.Message, error) {
 	query := fmt.Sprintf(`
 SELECT
-	*
+	chat_id
 FROM 
 	%s 
 WHERE
@@ -60,11 +61,11 @@ LIMIT ? OFFSET ?
 func (s *Store) GetByPeerID(ctx context.Context, ID int64, limit, offset int64) ([]*message.Message, error) {
 	query := fmt.Sprintf(`
 SELECT 
-	*
+	peer_id
 FROM 
 	%s
 WHERE 
-	peer_id = $1
+	peer_id=$1
 LIMIT ?
 OFFSET ?`, s.table)
 
@@ -90,7 +91,7 @@ OFFSET ?`, s.table)
 func (s *Store) Search(ctx context.Context, query string, limit, offset int64) ([]*message.Message, error) {
 	searchQuery := fmt.Sprintf(`
 SELECT 
-	*
+	text
 FROM 
 	%s
 WHERE text ILIKE '%%?%%'

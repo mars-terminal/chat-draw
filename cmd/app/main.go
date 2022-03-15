@@ -1,38 +1,27 @@
 package main
 
 import (
-
-	//Standard library
 	"context"
-	messageHandler "repositorie/internal/server/http/message"
 	"time"
 
-	//GITHUB
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 
-	//Servers
-	http2 "repositorie/internal/server/http"
-	authHandler "repositorie/internal/server/http/auth"
-	docsHandler "repositorie/internal/server/http/docs"
-	userHandler "repositorie/internal/server/http/user"
-
-	//Service
-	authService "repositorie/internal/service/auth"
-	messageService "repositorie/internal/service/message"
-	userService "repositorie/internal/service/user"
-
-	//Storages
-	messageStorage "repositorie/internal/storage/postgres/message"
-	userStorage "repositorie/internal/storage/postgres/user"
-	authStorage "repositorie/internal/storage/redis/auth"
-
-	"repositorie/internal/storage/postgres"
-	"repositorie/internal/storage/redis"
-
-	//Config
-	"repositorie/config"
+	"github.com/mars-terminal/chat-draw/config"
+	http2 "github.com/mars-terminal/chat-draw/internal/server/http"
+	authHandler "github.com/mars-terminal/chat-draw/internal/server/http/auth"
+	docsHandler "github.com/mars-terminal/chat-draw/internal/server/http/docs"
+	messageHandler "github.com/mars-terminal/chat-draw/internal/server/http/message"
+	userHandler "github.com/mars-terminal/chat-draw/internal/server/http/user"
+	authService "github.com/mars-terminal/chat-draw/internal/service/auth"
+	messageService "github.com/mars-terminal/chat-draw/internal/service/message"
+	userService "github.com/mars-terminal/chat-draw/internal/service/user"
+	"github.com/mars-terminal/chat-draw/internal/storage/postgres"
+	messageStorage "github.com/mars-terminal/chat-draw/internal/storage/postgres/message"
+	userStorage "github.com/mars-terminal/chat-draw/internal/storage/postgres/user"
+	"github.com/mars-terminal/chat-draw/internal/storage/redis"
+	authStorage "github.com/mars-terminal/chat-draw/internal/storage/redis/auth"
 )
 
 func init() {

@@ -4,8 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"repositorie/internal/entities"
-	"repositorie/internal/entities/user"
+
+	"github.com/mars-terminal/chat-draw/internal/entities"
+	"github.com/mars-terminal/chat-draw/internal/entities/user"
 )
 
 func (s *Store) GetByID(ctx context.Context, ID int64) (*user.User, error) {

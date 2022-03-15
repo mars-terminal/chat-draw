@@ -5,8 +5,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"repositorie/internal/entities/user"
-	"repositorie/internal/util"
+	"github.com/mars-terminal/chat-draw/internal/entities/user"
+	"github.com/mars-terminal/chat-draw/internal/util"
 )
 
 // update godoc
@@ -15,10 +15,11 @@ import (
 // @Tags         users
 // @Accept       json
 // @Produce      json
+// @Param        UpdateUserQuery body user.UpdateUserQuery true "user update"
 // @Success      200  {object}  auth.Tokens
 // @Failure      400  {object}  entities.Response
 // @Failure      500  {object}  entities.Response
-// @Security 	ApiKeyAuth
+// @Security 	 ApiKeyAuth
 // @Router       /users/update [put]
 func (h *Handler) update(c *gin.Context) {
 	logger := log.WithField("user", "update")

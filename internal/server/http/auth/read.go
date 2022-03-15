@@ -2,8 +2,9 @@ package auth
 
 import (
 	"net/http"
-	"repositorie/internal/entities/auth"
-	"repositorie/internal/util"
+
+	"github.com/mars-terminal/chat-draw/internal/entities/auth"
+	"github.com/mars-terminal/chat-draw/internal/util"
 
 	"github.com/gin-gonic/gin"
 )

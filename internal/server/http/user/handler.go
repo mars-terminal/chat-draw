@@ -4,7 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 
-	"repositorie/internal/service"
+	"github.com/mars-terminal/chat-draw/internal/service"
 )
 
 var log = logrus.WithFields(logrus.Fields{
@@ -26,5 +26,5 @@ func (h *Handler) InitRoutes(r gin.IRouter) {
 	group.GET("/me", h.me)
 	group.GET("/search/:query", h.search)
 	group.PUT("/update", h.update)
-	group.DELETE("/delete", h.delete)
+	group.DELETE("/delete/:id", h.delete)
 }

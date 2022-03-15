@@ -2,13 +2,14 @@ package auth
 
 import (
 	"context"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
+	"github.com/mars-terminal/chat-draw/internal/entities/auth"
+	"github.com/mars-terminal/chat-draw/internal/entities/user"
+	"github.com/mars-terminal/chat-draw/internal/service"
+	"github.com/mars-terminal/chat-draw/internal/storage"
 	"golang.org/x/crypto/bcrypt"
-	"repositorie/internal/entities/auth"
-	"repositorie/internal/entities/user"
-	"repositorie/internal/service"
-	"repositorie/internal/storage"
 
 	"strconv"
 	"time"

@@ -2,7 +2,8 @@ package service
 
 import (
 	"context"
-	"repositorie/internal/entities/message"
+
+	"github.com/mars-terminal/chat-draw/internal/entities/message"
 )
 
 type MessageService interface {

@@ -2,8 +2,9 @@ package message
 
 import (
 	"net/http"
-	"repositorie/internal/entities/message"
-	"repositorie/internal/util"
+
+	"github.com/mars-terminal/chat-draw/internal/entities/message"
+	"github.com/mars-terminal/chat-draw/internal/util"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,10 +15,11 @@ import (
 // @Tags         messages
 // @Accept       json
 // @Produce      json
+// @Param        UpdateMessageQuery body message.UpdateMessageQuery true "message update"
 // @Success      200  {array} 	message.Message
 // @Failure      400  {object}  entities.Response
 // @Failure      500  {object}  entities.Response
-// @Security 	ApiKeyAuth
+// @Security 	 ApiKeyAuth
 // @Router       /message/update [put]
 func (h *Handler) update(c *gin.Context) {
 	logger := log.WithField("message", "update")

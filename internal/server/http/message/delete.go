@@ -2,9 +2,10 @@ package message
 
 import (
 	"net/http"
-	"repositorie/internal/entities"
-	"repositorie/internal/util"
 	"strconv"
+
+	"github.com/mars-terminal/chat-draw/internal/entities"
+	"github.com/mars-terminal/chat-draw/internal/util"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,11 +16,12 @@ import (
 // @Tags         messages
 // @Accept       json
 // @Produce      json
+// @Param		 DeleteByID path int true "message id"
 // @Success      200  {array} 	message.Message
 // @Failure      400  {object}  entities.Response
 // @Failure      500  {object}  entities.Response
-// @Security 	ApiKeyAuth
-// @Router       /message/delete [delete]
+// @Security 	 ApiKeyAuth
+// @Router       /message/delete/{id} [delete]
 func (h *Handler) delete(c *gin.Context) {
 	logger := log.WithField("message", "delete")
 

@@ -2,10 +2,11 @@ package message
 
 import (
 	"net/http"
-	"repositorie/internal/util"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+
+	"github.com/mars-terminal/chat-draw/internal/util"
 )
 
 // getByChatID godoc
@@ -20,7 +21,7 @@ import (
 // @Success      200  {array} 	message.Message
 // @Failure      400  {object}  entities.Response
 // @Failure      500  {object}  entities.Response
-// @Security 	ApiKeyAuth
+// @Security 	 ApiKeyAuth
 // @Router       /message/chat_id/{chat_id} [get]
 func (h *Handler) getByChatID(c *gin.Context) {
 	logger := log.WithField("message", "get by chat id")
@@ -64,7 +65,7 @@ func (h *Handler) getByChatID(c *gin.Context) {
 // @Success      200  {array} 	message.Message
 // @Failure      400  {object}  entities.Response
 // @Failure      500  {object}  entities.Response
-// @Security 	ApiKeyAuth
+// @Security 	 ApiKeyAuth
 // @Router       /message/peer_id/{peer_id} [get]
 func (h *Handler) getByPeerID(c *gin.Context) {
 	logger := log.WithField("message", "get by peer id")
@@ -108,7 +109,7 @@ func (h *Handler) getByPeerID(c *gin.Context) {
 // @Success      200  {array} 	message.Message
 // @Failure      400  {object}  entities.Response
 // @Failure      500  {object}  entities.Response
-// @Security 	ApiKeyAuth
+// @Security 	 ApiKeyAuth
 // @Router       /message/search/{query} [get]
 func (h *Handler) search(c *gin.Context) {
 	logger := log.WithField("message", "search")

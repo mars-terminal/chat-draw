@@ -63,6 +63,13 @@ definitions:
       updated_at:
         type: string
     type: object
+  message.UpdateMessageQuery:
+    properties:
+      id:
+        type: integer
+      text:
+        type: string
+    type: object
 host: localhost:8000
 info:
   contact:
@@ -206,11 +213,17 @@ paths:
       summary: Create message.
       tags:
       - messages
-  /message/delete:
+  /message/delete/{id}:
     delete:
       consumes:
       - application/json
       description: Gets message id if everything is OK deleting message.
+      parameters:
+      - description: message id
+        in: path
+        name: DeleteByID
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -320,6 +333,13 @@ paths:
       consumes:
       - application/json
       description: Gets body if everything OK gives back updated message.
+      parameters:
+      - description: message update
+        in: body
+        name: UpdateMessageQuery
+        required: true
+        schema:
+          $ref: '#/definitions/message.UpdateMessageQuery'
       produces:
       - application/json
       responses:

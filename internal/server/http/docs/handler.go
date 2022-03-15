@@ -2,10 +2,11 @@ package docs
 
 import (
 	"fmt"
+
 	"github.com/gin-gonic/gin"
+	"github.com/mars-terminal/chat-draw/docs"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"repositorie/docs"
 )
 
 type Handler struct {

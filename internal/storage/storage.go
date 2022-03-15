@@ -2,9 +2,10 @@ package storage
 
 import (
 	"context"
-	"repositorie/internal/entities/message"
-	"repositorie/internal/entities/user"
 	"time"
+
+	"github.com/mars-terminal/chat-draw/internal/entities/message"
+	"github.com/mars-terminal/chat-draw/internal/entities/user"
 )
 
 type AuthStorage interface {

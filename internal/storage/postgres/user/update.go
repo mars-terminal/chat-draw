@@ -3,7 +3,8 @@ package user
 import (
 	"context"
 	"fmt"
-	"repositorie/internal/entities/user"
+
+	"github.com/mars-terminal/chat-draw/internal/entities/user"
 )
 
 func (s *Store) Update(ctx context.Context, q *user.UpdateUserQuery) (*user.User, error) {

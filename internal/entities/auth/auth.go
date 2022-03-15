@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"repositorie/internal/entities/user"
+	"github.com/mars-terminal/chat-draw/internal/entities/user"
 )
 
 type Tokens struct {

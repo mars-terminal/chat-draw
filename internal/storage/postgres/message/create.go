@@ -3,8 +3,9 @@ package message
 import (
 	"context"
 	"fmt"
-	"repositorie/internal/entities/message"
 	"time"
+
+	"github.com/mars-terminal/chat-draw/internal/entities/message"
 )
 
 func (s *Store) Create(ctx context.Context, q *message.CreateMessageQuery) (*message.Message, error) {

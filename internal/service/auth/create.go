@@ -4,8 +4,9 @@ import (
 	"context"
 	"crypto/sha1"
 	"fmt"
-	"repositorie/internal/entities/auth"
-	"repositorie/internal/entities/user"
+
+	"github.com/mars-terminal/chat-draw/internal/entities/auth"
+	"github.com/mars-terminal/chat-draw/internal/entities/user"
 )
 
 func (s *Service) SignUp(ctx context.Context, q *auth.SignUpQuery) (*auth.Tokens, error) {

@@ -4,9 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"repositorie/internal/entities"
-	"repositorie/internal/entities/user"
-	"repositorie/internal/storage"
+
+	"github.com/mars-terminal/chat-draw/internal/entities"
+	"github.com/mars-terminal/chat-draw/internal/entities/user"
+	"github.com/mars-terminal/chat-draw/internal/storage"
 )
 
 type Service struct {

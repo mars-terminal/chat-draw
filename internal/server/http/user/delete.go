@@ -2,9 +2,10 @@ package user
 
 import (
 	"net/http"
-	"repositorie/internal/entities"
-	"repositorie/internal/util"
 	"strconv"
+
+	"github.com/mars-terminal/chat-draw/internal/entities"
+	"github.com/mars-terminal/chat-draw/internal/util"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,11 +16,12 @@ import (
 // @Tags         users
 // @Accept       json
 // @Produce      json
+// @Param  		 DeleteById path int true "delete by user id"
 // @Success      200  {object}  auth.Tokens
 // @Failure      400  {object}  entities.Response
 // @Failure      500  {object}  entities.Response
-// @Security 	ApiKeyAuth
-// @Router       /users/delete [delete]
+// @Security 	 ApiKeyAuth
+// @Router       /users/delete{id} [delete]
 func (h *Handler) delete(c *gin.Context) {
 	logger := log.WithField("user", "delete")
 

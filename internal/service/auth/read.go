@@ -2,8 +2,9 @@ package auth
 
 import (
 	"context"
-	"repositorie/internal/entities/auth"
-	"repositorie/internal/entities/user"
+
+	"github.com/mars-terminal/chat-draw/internal/entities/auth"
+	"github.com/mars-terminal/chat-draw/internal/entities/user"
 )
 
 func (s *Service) SignIn(ctx context.Context, q *auth.SignInQuery) (*auth.Tokens, error) {

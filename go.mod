@@ -1,4 +1,4 @@
-module repositorie
+module github.com/mars-terminal/chat-draw
 
 go 1.17
 

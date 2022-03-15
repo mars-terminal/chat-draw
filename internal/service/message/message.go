@@ -2,8 +2,9 @@ package message
 
 import (
 	"context"
-	"repositorie/internal/entities/message"
-	"repositorie/internal/storage"
+
+	"github.com/mars-terminal/chat-draw/internal/entities/message"
+	"github.com/mars-terminal/chat-draw/internal/storage"
 )
 
 type Service struct {

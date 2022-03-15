@@ -2,7 +2,8 @@ package service
 
 import (
 	"context"
-	"repositorie/internal/entities/user"
+
+	"github.com/mars-terminal/chat-draw/internal/entities/user"
 )
 
 type UserService interface {

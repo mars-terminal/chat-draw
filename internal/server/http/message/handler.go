@@ -1,7 +1,7 @@
 package message
 
 import (
-	"repositorie/internal/service"
+	"github.com/mars-terminal/chat-draw/internal/service"
 
 	"github.com/sirupsen/logrus"
 
@@ -29,5 +29,5 @@ func (h *Handler) InitRoutes(r gin.IRouter) {
 	group.GET("/peer_id/:peer_id", h.getByPeerID)
 	group.GET("/search/:query", h.search)
 	group.PUT("/update", h.update)
-	group.DELETE("/delete", h.delete)
+	group.DELETE("/delete/:id", h.delete)
 }

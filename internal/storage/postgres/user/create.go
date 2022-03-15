@@ -3,8 +3,9 @@ package user
 import (
 	"context"
 	"fmt"
-	"repositorie/internal/entities/user"
 	"time"
+
+	"github.com/mars-terminal/chat-draw/internal/entities/user"
 )
 
 func (s *Store) Create(ctx context.Context, q *user.CreateUserQuery) (*user.User, error) {

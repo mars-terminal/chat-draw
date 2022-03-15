@@ -3,7 +3,8 @@ package message
 import (
 	"context"
 	"fmt"
-	"repositorie/internal/entities/message"
+
+	"github.com/mars-terminal/chat-draw/internal/entities/message"
 )
 
 func (s *Store) Update(ctx context.Context, q *message.UpdateMessageQuery) (*message.Message, error) {

@@ -5,8 +5,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"repositorie/internal/entities/message"
-	"repositorie/internal/util"
+	"github.com/mars-terminal/chat-draw/internal/entities/message"
+	"github.com/mars-terminal/chat-draw/internal/util"
 )
 
 // create godoc
@@ -19,7 +19,7 @@ import (
 // @Success      200  {array} 	message.Message
 // @Failure      400  {object}  entities.Response
 // @Failure      500  {object}  entities.Response
-// @Security 	ApiKeyAuth
+// @Security 	 ApiKeyAuth
 // @Router       /message/create [post]
 func (h *Handler) create(c *gin.Context) {
 	logger := log.WithField("message", "create")
