@@ -462,7 +462,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/delete": {
+        "/users/delete{id}": {
             "delete": {
                 "security": [
                     {
@@ -480,6 +480,15 @@ const docTemplate = `{
                     "users"
                 ],
                 "summary": "Deleting user.",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "delete by user id",
+                        "name": "DeleteById",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -609,6 +618,17 @@ const docTemplate = `{
                     "users"
                 ],
                 "summary": "Updating user fields.",
+                "parameters": [
+                    {
+                        "description": "user update",
+                        "name": "UpdateUserQuery",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.UpdateUserQuery"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -736,6 +756,30 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "text": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.UpdateUserQuery": {
+            "type": "object",
+            "properties": {
+                "first_name": {
+                    "type": "string"
+                },
+                "nick_name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 8
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "required": {
+                    "type": "integer"
+                },
+                "second_name": {
                     "type": "string"
                 }
             }

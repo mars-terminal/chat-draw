@@ -70,6 +70,22 @@ definitions:
       text:
         type: string
     type: object
+  user.UpdateUserQuery:
+    properties:
+      first_name:
+        type: string
+      nick_name:
+        type: string
+      password:
+        minLength: 8
+        type: string
+      phone:
+        type: string
+      required:
+        type: integer
+      second_name:
+        type: string
+    type: object
 host: localhost:8000
 info:
   contact:
@@ -362,11 +378,17 @@ paths:
       summary: Updating message.
       tags:
       - messages
-  /users/delete:
+  /users/delete{id}:
     delete:
       consumes:
       - application/json
       description: Gets user id if everything OK deleting user.
+      parameters:
+      - description: delete by user id
+        in: path
+        name: DeleteById
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -448,6 +470,13 @@ paths:
       consumes:
       - application/json
       description: Gets user if everything OK gives back updated user.
+      parameters:
+      - description: user update
+        in: body
+        name: UpdateUserQuery
+        required: true
+        schema:
+          $ref: '#/definitions/user.UpdateUserQuery'
       produces:
       - application/json
       responses:
