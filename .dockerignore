@@ -1,0 +1,9 @@
+.idea/
+.vscode/
+
+main
+main.exe
+.env
+
+Dockerfile
+Docker-compose.yml
