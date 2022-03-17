@@ -16,12 +16,12 @@ import (
 // @Tags         users
 // @Accept       json
 // @Produce      json
-// @Param  		 DeleteById path int true "delete by user id"
+// @Param  		 userId path int true "user id"
 // @Success      200  {object}  auth.Tokens
 // @Failure      400  {object}  entities.Response
 // @Failure      500  {object}  entities.Response
 // @Security 	 ApiKeyAuth
-// @Router       /users/delete{id} [delete]
+// @Router       /users/delete/{id} [delete]
 func (h *Handler) delete(c *gin.Context) {
 	logger := log.WithField("user", "delete")
 

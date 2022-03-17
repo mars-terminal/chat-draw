@@ -16,7 +16,7 @@ import (
 // @Tags         messages
 // @Accept       json
 // @Produce      json
-// @Param		 DeleteByID path int true "message id"
+// @Param		 messageId path int true "message id"
 // @Success      200  {array} 	message.Message
 // @Failure      400  {object}  entities.Response
 // @Failure      500  {object}  entities.Response

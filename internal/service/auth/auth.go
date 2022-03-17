@@ -2,17 +2,17 @@ package auth
 
 import (
 	"context"
+	"strconv"
+	"time"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
+
 	"github.com/mars-terminal/chat-draw/internal/entities/auth"
 	"github.com/mars-terminal/chat-draw/internal/entities/user"
 	"github.com/mars-terminal/chat-draw/internal/service"
 	"github.com/mars-terminal/chat-draw/internal/storage"
-	"golang.org/x/crypto/bcrypt"
-
-	"strconv"
-	"time"
 )
 
 type Service struct {
