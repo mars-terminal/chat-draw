@@ -1,17 +1,21 @@
 package service
 
 import (
-	"context"
-	"repositorie/internal/entities/auth"
+	"github.com/mars-terminal/chat-draw/internal/entities"
+	"github.com/mars-terminal/chat-draw/internal/entities/user"
+
+	"github.com/gin-gonic/gin"
 )
 
-type AuthService interface {
-	SignIn(ctx context.Context, q *auth.SignInQuery) (*auth.Tokens, error)
-	SignUp(ctx context.Context, q *auth.SignUpQuery) (*auth.Tokens, error)
-}
+func GetUserFromContext(ctx *gin.Context) (*user.User, error) {
+	u, exists := ctx.Get(gin.AuthUserKey)
+	if !exists {
+		return nil, entities.ErrUnauthorized
+	}
 
-type UserService interface {
-}
+	if u, ok := u.(*user.User); ok {
+		return u, nil
+	}
 
-type MessageService interface {
+	return nil, entities.ErrUnauthorized
 }

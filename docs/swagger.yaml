@@ -1,0 +1,505 @@
+basePath: /
+definitions:
+  auth.SignInQuery:
+    properties:
+      nick_name:
+        minLength: 1
+        type: string
+      password:
+        minLength: 8
+        type: string
+    type: object
+  auth.SignUpQuery:
+    properties:
+      first_name:
+        type: string
+      nick_name:
+        type: string
+      password:
+        minLength: 8
+        type: string
+      phone:
+        type: string
+      second_name:
+        type: string
+    type: object
+  auth.Tokens:
+    properties:
+      access_token:
+        type: string
+      expire_at:
+        type: integer
+      refresh_token:
+        type: string
+    type: object
+  entities.Response:
+    properties:
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  message.CreateMessageQuery:
+    properties:
+      chat_id:
+        type: integer
+      peer_id:
+        type: integer
+      text:
+        type: string
+    type: object
+  message.Message:
+    properties:
+      chat_id:
+        type: integer
+      created_at:
+        type: string
+      id:
+        type: integer
+      peer_id:
+        type: integer
+      text:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  message.UpdateMessageQuery:
+    properties:
+      id:
+        type: integer
+      text:
+        type: string
+    type: object
+  user.UpdateUserQuery:
+    properties:
+      first_name:
+        type: string
+      nick_name:
+        type: string
+      password:
+        minLength: 8
+        type: string
+      phone:
+        type: string
+      required:
+        type: integer
+      second_name:
+        type: string
+    type: object
+host: localhost:8000
+info:
+  contact:
+    name: API Support
+    url: https://google.com
+  description: ChatDraw API specs.
+  title: ChatDraw API
+  version: "1.0"
+paths:
+  /auth/sign-in:
+    post:
+      consumes:
+      - application/json
+      description: Gets body and Authenticate user if exists.
+      parameters:
+      - description: Request payload
+        in: body
+        name: SignUpQuery
+        schema:
+          $ref: '#/definitions/auth.SignInQuery'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.Tokens'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.Response'
+      summary: Signs In the user.
+      tags:
+      - auth
+  /auth/sign-up:
+    post:
+      consumes:
+      - application/json
+      description: Gets body and create user if not exists.
+      parameters:
+      - description: Request payload
+        in: body
+        name: SignUpQuery
+        required: true
+        schema:
+          $ref: '#/definitions/auth.SignUpQuery'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.Tokens'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.Response'
+      summary: Signs Up new user.
+      tags:
+      - auth
+  /message/chat_id/{chat_id}:
+    get:
+      consumes:
+      - application/json
+      description: Gets id and if everything is OK gives chat by chat id.
+      parameters:
+      - description: chat id
+        in: path
+        name: chat_id
+        required: true
+        type: integer
+      - description: limit query
+        in: query
+        name: limit
+        type: integer
+      - description: offset query
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/message.Message'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get chat by chat id.
+      tags:
+      - messages
+  /message/create:
+    post:
+      consumes:
+      - application/json
+      description: Gets body and  if everything is OK creating message.
+      parameters:
+      - description: Request payload
+        in: body
+        name: CreateMessageQuery
+        required: true
+        schema:
+          $ref: '#/definitions/message.CreateMessageQuery'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/message.Message'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Create message.
+      tags:
+      - messages
+  /message/delete/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Gets message id if everything is OK deleting message.
+      parameters:
+      - description: message id
+        in: path
+        name: DeleteByID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/message.Message'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Deleting message.
+      tags:
+      - messages
+  /message/peer_id/{peer_id}:
+    get:
+      consumes:
+      - application/json
+      description: Gets id and if everything is OK gives chat by peer id.
+      parameters:
+      - description: peer id
+        in: path
+        name: peer_id
+        required: true
+        type: integer
+      - description: limit query
+        in: query
+        name: limit
+        type: integer
+      - description: offset query
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/message.Message'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Get chat by peer id.
+      tags:
+      - messages
+  /message/search/{query}:
+    get:
+      consumes:
+      - application/json
+      description: Gets query and if everything is OK searching message.
+      parameters:
+      - description: Search query
+        in: path
+        name: query
+        required: true
+        type: string
+      - description: limit query
+        in: query
+        name: limit
+        type: integer
+      - description: offset query
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/message.Message'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Search message.
+      tags:
+      - messages
+  /message/update:
+    put:
+      consumes:
+      - application/json
+      description: Gets body if everything OK gives back updated message.
+      parameters:
+      - description: message update
+        in: body
+        name: UpdateMessageQuery
+        required: true
+        schema:
+          $ref: '#/definitions/message.UpdateMessageQuery'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/message.Message'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Updating message.
+      tags:
+      - messages
+  /users/delete{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Gets user id if everything OK deleting user.
+      parameters:
+      - description: delete by user id
+        in: path
+        name: DeleteById
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.Tokens'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Deleting user.
+      tags:
+      - users
+  /users/me:
+    get:
+      consumes:
+      - application/json
+      description: Gets user if everything OK gives back user with 4 fields.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.Tokens'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Showing users profile.
+      tags:
+      - users
+  /users/search/{query}:
+    get:
+      consumes:
+      - application/json
+      description: Gets user ID or Nick Name if everything OK gives back user.
+      parameters:
+      - description: query nickname or id
+        in: path
+        name: Query
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.Tokens'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Searching by Nick Name of ID.
+      tags:
+      - users
+  /users/update:
+    put:
+      consumes:
+      - application/json
+      description: Gets user if everything OK gives back updated user.
+      parameters:
+      - description: user update
+        in: body
+        name: UpdateUserQuery
+        required: true
+        schema:
+          $ref: '#/definitions/user.UpdateUserQuery'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.Tokens'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/entities.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/entities.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: Updating user fields.
+      tags:
+      - users
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
