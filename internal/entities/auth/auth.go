@@ -11,7 +11,7 @@ type Tokens struct {
 }
 
 type SignInQuery struct {
-	NickName string `json:"nick_name" validate:"min=1"`
+	Email    string `json:"email" validate:"email"`
 	Password string `json:"password" validate:"min=8"`
 }
 

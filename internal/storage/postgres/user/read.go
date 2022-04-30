@@ -89,10 +89,10 @@ func (s *Store) GetByNickNameStrict(ctx context.Context, nickName string) (*user
 	return &u, nil
 }
 
-func (s *Store) GetByNickNameAndPasswordHash(ctx context.Context, nickName, passwordHash string) (*user.User, error) {
-	query := fmt.Sprintf("SELECT * FROM %s WHERE nick_name = $1 AND password = $2", s.table)
+func (s *Store) GetByEmailAndPasswordHash(ctx context.Context, email, passwordHash string) (*user.User, error) {
+	query := fmt.Sprintf("SELECT * FROM %s WHERE email=$1 AND password = $2", s.table)
 
-	row := s.db.QueryRowxContext(ctx, query, nickName, passwordHash)
+	row := s.db.QueryRowxContext(ctx, query, email, passwordHash)
 	if err := row.Err(); err != nil {
 		return nil, err
 	}
@@ -100,7 +100,7 @@ func (s *Store) GetByNickNameAndPasswordHash(ctx context.Context, nickName, pass
 	var u user.User
 	err := row.StructScan(&u)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get by nick name and password: %w", err)
+		return nil, fmt.Errorf("failed to get by email and password: %w", err)
 	}
 
 	return &u, nil

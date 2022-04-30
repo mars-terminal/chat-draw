@@ -30,8 +30,8 @@ func (s *Service) GetByNickName(ctx context.Context, nickName string) ([]*user.U
 	return s.storage.GetByNickName(ctx, nickName)
 }
 
-func (s *Service) GetByNickNameAndPasswordHash(ctx context.Context, nickName, passwordHash string) (*user.User, error) {
-	return s.storage.GetByNickNameAndPasswordHash(ctx, nickName, passwordHash)
+func (s *Service) GetByEmailAndPasswordHash(ctx context.Context, email, passwordHash string) (*user.User, error) {
+	return s.storage.GetByEmailAndPasswordHash(ctx, email, passwordHash)
 }
 
 func (s *Service) GetByPhone(ctx context.Context, phone string) ([]*user.User, error) {

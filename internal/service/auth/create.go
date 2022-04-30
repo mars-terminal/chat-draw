@@ -16,6 +16,7 @@ func (s *Service) SignUp(ctx context.Context, q *auth.SignUpQuery) (*auth.Tokens
 		FirstName:  q.FirstName,
 		SecondName: q.SecondName,
 		NickName:   q.NickName,
+		Email:      q.Email,
 		Phone:      q.Phone,
 		Password:   q.Password,
 	})

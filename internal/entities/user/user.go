@@ -7,6 +7,7 @@ type User struct {
 	FirstName  string    `json:"first_name" db:"first_name"`
 	SecondName string    `json:"second_name" db:"second_name"`
 	NickName   string    `json:"nick_name" db:"nick_name"`
+	Email      string    `json:"email" db:"email"`
 	Phone      string    `json:"phone,omitempty" db:"phone" validate:"e164"`
 	Password   string    `json:"password,omitempty" db:"password" validate:"min=8"`
 	CreatedAt  time.Time `json:"created_at,omitempty" db:"created_at"`
@@ -17,6 +18,7 @@ type CreateUserQuery struct {
 	FirstName  string `json:"first_name"`
 	SecondName string `json:"second_name"`
 	NickName   string `json:"nick_name"`
+	Email      string `json:"email" db:"email"`
 	Phone      string `json:"phone" validate:"e164"`
 	Password   string `json:"password" validate:"min=8"`
 }

@@ -10,7 +10,7 @@ type UserService interface {
 	GetByID(ctx context.Context, ID int64) (*user.User, error)
 	GetByIDs(ctx context.Context, IDs []int64) ([]*user.User, error)
 	GetByNickName(ctx context.Context, nickName string) ([]*user.User, error)
-	GetByNickNameAndPasswordHash(ctx context.Context, nickName, passwordHash string) (*user.User, error)
+	GetByEmailAndPasswordHash(ctx context.Context, email, passwordHash string) (*user.User, error)
 	GetByPhone(ctx context.Context, phone string) ([]*user.User, error)
 
 	Create(ctx context.Context, q *user.CreateUserQuery) (*user.User, error)

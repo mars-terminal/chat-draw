@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Service) SignIn(ctx context.Context, q *auth.SignInQuery) (*auth.Tokens, error) {
-	u, err := s.userService.GetByNickNameAndPasswordHash(ctx, q.NickName, s.generatePasswordHash(q.Password))
+	u, err := s.userService.GetByEmailAndPasswordHash(ctx, q.Email, s.generatePasswordHash(q.Password))
 	if err != nil {
 		return nil, err
 	}

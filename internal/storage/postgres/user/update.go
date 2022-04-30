@@ -14,13 +14,14 @@ SET
 	first_name=$1,
 	secont_name = $2,
 	nick_name = $3,
-	phone = $4,
-	password = $5
+	email = $4
+	phone = $5,
+	password = $6
 WHERE 
-	id = $6
+	id = $7
 `, s.table)
 
-	result, err := s.db.ExecContext(ctx, query, q.FirstName, q.SecondName, q.NickName, q.Phone, q.Password, q.ID)
+	result, err := s.db.ExecContext(ctx, query, q.FirstName, q.SecondName, q.NickName, q.Email, q.Phone, q.Password, q.ID)
 	if err != nil {
 		return nil, fmt.Errorf("failet to update (user storage): %w", err)
 	}
