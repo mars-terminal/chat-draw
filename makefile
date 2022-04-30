@@ -1,6 +1,6 @@
 .PHONY: run, migrate_down_postgres, migrate_up_postgres
 
-export POSTGRESQL_URL="postgres://${POSTGRESQL_USER}:${POSTGRES_PASSWORD}@localhost:5432/${DB_NAME}?sslmode=disable"
+export POSTGRESQL_URL="postgres://rustam:1234@localhost:5432/rustam?sslmode=disable"
 
 migrate_up_postgres:
 	golang-migrate -database ${POSTGRESQL_URL} -path scripts up
