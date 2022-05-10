@@ -50,14 +50,16 @@ func (s *Store) GetByIDs(ctx context.Context, IDs []int64) ([]*user.User, error)
 }
 
 func (s *Store) GetByNickName(ctx context.Context, nickName string) ([]*user.User, error) {
-	query := fmt.Sprintf("SELECT * FROM %s WHERE nick_name ILIKE '%%?%%'", s.table)
+	query := fmt.Sprintf("SELECT * FROM %s WHERE nick_name ILIKE $1", s.table)
+
+	nickName = fmt.Sprintf("%%%s%%", nickName)
 
 	rows, err := s.db.QueryxContext(ctx, query, nickName)
 	if err != nil {
 		return nil, fmt.Errorf("failet to get by nick name (user storage): %w", err)
 	}
 
-	var users []*user.User
+	var users = make([]*user.User, 0)
 	for rows.Next() {
 		var u user.User
 		err := rows.StructScan(&u)
@@ -90,7 +92,7 @@ func (s *Store) GetByNickNameStrict(ctx context.Context, nickName string) (*user
 }
 
 func (s *Store) GetByEmailAndPasswordHash(ctx context.Context, email, passwordHash string) (*user.User, error) {
-	query := fmt.Sprintf("SELECT * FROM %s WHERE email=$1 AND password = $2", s.table)
+	query := fmt.Sprintf("SELECT * FROM %s WHERE email = $1 AND password = $2", s.table)
 
 	row := s.db.QueryRowxContext(ctx, query, email, passwordHash)
 	if err := row.Err(); err != nil {

@@ -2,8 +2,8 @@ http:
   port: "8000"
 
 auth:
-  salt: "sdgfuhbjniklrthgjikutgrfdikjol;,./m rtdfgcvbsxjik;m l,./thrfgvbcdytghfcvdjm ikl;,./tyfghvbcd j;m kl,./"
-  sign_key: "asdjikm,lo ;.45rtegujioklertdfscgvxujn iklm,.cfghtv/bdrsxrtdfgcbvujn iklm,./"
+  salt: "sdas8912moksa09"
+  sign_key: "amerikasad"
   token_ttl: 72h
 
 db:

@@ -20,9 +20,10 @@ RETURNING id
 	row := s.db.QueryRowxContext(ctx, query, q.FirstName, q.SecondName, q.NickName, q.Email, q.Phone, q.Password)
 
 	var id int64
-	err := row.StructScan(&id)
+	err := row.Scan(&id)
 	if err != nil {
-		return nil, fmt.Errorf("failed to last insert id in create (user storage): %w", err)
+		log.Errorf("failed to last insert id in create (user storage): %v", err)
+		return nil, fmt.Errorf("invalid data, please try again")
 	}
 
 	return &user.User{

@@ -117,7 +117,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Gets id and if everything is OK gives chat by chat id.",
+                "description": "Gets chat and peer id and if everything is OK gives chat by chat id.",
                 "consumes": [
                     "application/json"
                 ],
@@ -250,73 +250,9 @@ const docTemplate = `{
                     {
                         "type": "integer",
                         "description": "message id",
-                        "name": "DeleteByID",
+                        "name": "messageId",
                         "in": "path",
                         "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/message.Message"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/entities.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/entities.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/message/peer_id/{peer_id}": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "Gets id and if everything is OK gives chat by peer id.",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "messages"
-                ],
-                "summary": "Get chat by peer id.",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "peer id",
-                        "name": "peer_id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "limit query",
-                        "name": "limit",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "offset query",
-                        "name": "offset",
-                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -462,7 +398,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/users/delete{id}": {
+        "/users/delete/{id}": {
             "delete": {
                 "security": [
                     {
@@ -483,8 +419,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "delete by user id",
-                        "name": "DeleteById",
+                        "description": "user id",
+                        "name": "userId",
                         "in": "path",
                         "required": true
                     }
@@ -656,9 +592,8 @@ const docTemplate = `{
         "auth.SignInQuery": {
             "type": "object",
             "properties": {
-                "nick_name": {
-                    "type": "string",
-                    "minLength": 1
+                "email": {
+                    "type": "string"
                 },
                 "password": {
                     "type": "string",
@@ -669,6 +604,9 @@ const docTemplate = `{
         "auth.SignUpQuery": {
             "type": "object",
             "properties": {
+                "email": {
+                    "type": "string"
+                },
                 "first_name": {
                     "type": "string"
                 },
@@ -763,6 +701,9 @@ const docTemplate = `{
         "user.UpdateUserQuery": {
             "type": "object",
             "properties": {
+                "email": {
+                    "type": "string"
+                },
                 "first_name": {
                     "type": "string"
                 },

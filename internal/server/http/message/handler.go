@@ -25,8 +25,7 @@ func (h *Handler) InitRoutes(r gin.IRouter) {
 	group := r.Group("/message")
 
 	group.POST("/create", h.create)
-	group.GET("/chat_id/:chat_id", h.getByChatID)
-	group.GET("/peer_id/:peer_id", h.getByPeerID)
+	group.GET("/:chat_id/:peer_id", h.getByChatIDAndPeerID)
 	group.GET("/search/:query", h.search)
 	group.PUT("/update", h.update)
 	group.DELETE("/delete/:id", h.delete)

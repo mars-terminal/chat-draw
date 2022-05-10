@@ -2,8 +2,7 @@ basePath: /
 definitions:
   auth.SignInQuery:
     properties:
-      nick_name:
-        minLength: 1
+      email:
         type: string
       password:
         minLength: 8
@@ -11,6 +10,8 @@ definitions:
     type: object
   auth.SignUpQuery:
     properties:
+      email:
+        type: string
       first_name:
         type: string
       nick_name:
@@ -72,6 +73,8 @@ definitions:
     type: object
   user.UpdateUserQuery:
     properties:
+      email:
+        type: string
       first_name:
         type: string
       nick_name:
@@ -158,7 +161,8 @@ paths:
     get:
       consumes:
       - application/json
-      description: Gets id and if everything is OK gives chat by chat id.
+      description: Gets chat and peer id and if everything is OK gives chat by chat
+        id.
       parameters:
       - description: chat id
         in: path
@@ -237,7 +241,7 @@ paths:
       parameters:
       - description: message id
         in: path
-        name: DeleteByID
+        name: messageId
         required: true
         type: integer
       produces:
@@ -260,47 +264,6 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Deleting message.
-      tags:
-      - messages
-  /message/peer_id/{peer_id}:
-    get:
-      consumes:
-      - application/json
-      description: Gets id and if everything is OK gives chat by peer id.
-      parameters:
-      - description: peer id
-        in: path
-        name: peer_id
-        required: true
-        type: integer
-      - description: limit query
-        in: query
-        name: limit
-        type: integer
-      - description: offset query
-        in: query
-        name: offset
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            items:
-              $ref: '#/definitions/message.Message'
-            type: array
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/entities.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/entities.Response'
-      security:
-      - ApiKeyAuth: []
-      summary: Get chat by peer id.
       tags:
       - messages
   /message/search/{query}:
@@ -378,15 +341,15 @@ paths:
       summary: Updating message.
       tags:
       - messages
-  /users/delete{id}:
+  /users/delete/{id}:
     delete:
       consumes:
       - application/json
       description: Gets user id if everything OK deleting user.
       parameters:
-      - description: delete by user id
+      - description: user id
         in: path
-        name: DeleteById
+        name: userId
         required: true
         type: integer
       produces:

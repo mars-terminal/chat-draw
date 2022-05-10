@@ -12,7 +12,7 @@ type Message struct {
 }
 
 type CreateMessageQuery struct {
-	Text   string `json:"text" validate:"min=1 max=999"`
+	Text   string `json:"text" validate:"min=1,max=999"`
 	ChatID int64  `json:"chat_id"`
 	PeerID int64  `json:"peer_id"`
 }

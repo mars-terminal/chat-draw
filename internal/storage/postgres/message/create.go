@@ -17,13 +17,14 @@ VALUES
 RETURNING id
 `, s.table)
 
-	result, err := s.db.ExecContext(ctx, query, q.Text, q.ChatID, q.PeerID)
-	if err != nil {
+	result := s.db.QueryRowContext(ctx, query, q.Text, q.ChatID, q.PeerID)
+	if err := result.Err(); err != nil {
 		return nil, fmt.Errorf("failed to create message: %w", err)
 	}
 
-	id, err := result.LastInsertId()
-	if err != nil {
+	var id int64
+
+	if err := result.Scan(&id); err != nil {
 		return nil, fmt.Errorf("failed to get last insert id after message create: %w", err)
 	}
 

@@ -21,13 +21,8 @@ func (s *Service) GetByID(ctx context.Context, ID int64) (*message.Message, erro
 	return s.storage.GetByID(ctx, ID)
 }
 
-func (s *Service) GetByChatID(ctx context.Context, ID int64, limit, offset int64) ([]*message.Message, error) {
-	return s.storage.GetByChatID(ctx, ID, limit, offset)
-
-}
-
-func (s *Service) GetByPeerID(ctx context.Context, ID int64, limit, offset int64) ([]*message.Message, error) {
-	return s.storage.GetByPeerID(ctx, ID, limit, offset)
+func (s *Service) GetByChatIDAndPeerID(ctx context.Context, chatID, peerID, limit, offset int64) ([]*message.Message, error) {
+	return s.storage.GetByChatIDAndPeerID(ctx, chatID, peerID, limit, offset)
 }
 
 func (s *Service) Create(ctx context.Context, q *message.CreateMessageQuery) (*message.Message, error) {

@@ -9,7 +9,7 @@ type User struct {
 	NickName   string    `json:"nick_name" db:"nick_name"`
 	Email      string    `json:"email" db:"email"`
 	Phone      string    `json:"phone,omitempty" db:"phone" validate:"e164"`
-	Password   string    `json:"password,omitempty" db:"password" validate:"min=8"`
+	Password   string    `json:"-" db:"password" validate:"min=8"`
 	CreatedAt  time.Time `json:"created_at,omitempty" db:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at,omitempty" db:"updated_at"`
 }

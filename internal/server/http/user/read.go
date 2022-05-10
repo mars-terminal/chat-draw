@@ -71,13 +71,14 @@ func (h *Handler) search(c *gin.Context) {
 
 	switch {
 	case isID:
-		_, err := h.Service.GetByID(c, int64(id))
+		u, err := h.Service.GetByID(c, int64(id))
 		if err != nil {
 			util.NewErrorResponse(logger, c.Writer, util.ParseErrorToHTTPErrorCode(err), err.Error())
 			return
 		}
+		users = append(users, u)
 	default:
-		_, err := h.Service.GetByNickName(c, query)
+		users, err = h.Service.GetByNickName(c, query)
 		if err != nil {
 			util.NewErrorResponse(logger, c.Writer, util.ParseErrorToHTTPErrorCode(err), err.Error())
 			return
